@@ -1,0 +1,56 @@
+package com.leodegario.springfood.domain.service;
+
+import com.leodegario.springfood.domain.exception.RestauranteNaoEncontradoException;
+import com.leodegario.springfood.domain.model.Cidade;
+import com.leodegario.springfood.domain.model.Cozinha;
+import com.leodegario.springfood.domain.model.Restaurante;
+import com.leodegario.springfood.repository.RestauranteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class CadastroRestauranteService {
+
+    @Autowired
+    private RestauranteRepository restauranteRepository;
+
+    @Autowired
+    private CadastroCozinhaService cadastroCozinha;
+
+    @Autowired
+    private CadastroCidadeService cadastroCidadeService;
+
+    @Transactional
+    public Restaurante salvar(Restaurante restaurante) {
+        Long cozinhaId = restaurante.getCozinha().getId();
+
+        Cozinha cozinha = cadastroCozinha.buscarOuFalhar(cozinhaId);
+        if(restaurante.getEndereco() != null) {
+            Cidade cidade = cadastroCidadeService
+                    .buscarOuFalhar(restaurante.getEndereco().getCidade().getId());
+            restaurante.getEndereco().setCidade(cidade);
+        }
+
+        restaurante.setCozinha(cozinha);
+
+        return restauranteRepository.save(restaurante);
+    }
+
+    @Transactional
+    public void ativar(Long restauranteId) {
+        Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
+        restauranteAtual.ativar();
+    }
+
+    @Transactional
+    public void inativar(Long restauranteId) {
+        Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
+        restauranteAtual.inativar();
+    }
+
+    public Restaurante buscarOuFalhar(Long restauranteId) {
+        return restauranteRepository.findById(restauranteId)
+                .orElseThrow(() -> new RestauranteNaoEncontradoException(restauranteId));
+    }
+}

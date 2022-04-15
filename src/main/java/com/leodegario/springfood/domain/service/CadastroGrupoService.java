@@ -3,6 +3,7 @@ package com.leodegario.springfood.domain.service;
 import com.leodegario.springfood.domain.exception.EntidadeEmUsoException;
 import com.leodegario.springfood.domain.exception.GrupoNaoEncontradoException;
 import com.leodegario.springfood.domain.model.Grupo;
+import com.leodegario.springfood.domain.model.Permissao;
 import com.leodegario.springfood.repository.GrupoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -19,6 +20,9 @@ public class CadastroGrupoService {
     
     @Autowired
     private GrupoRepository grupoRepository;
+
+    @Autowired
+    private CadastroPermissaoService cadastroPermissao;
     
     @Transactional
     public Grupo salvar(Grupo grupo) {
@@ -38,6 +42,22 @@ public class CadastroGrupoService {
             throw new EntidadeEmUsoException(
                 String.format(MSG_GRUPO_EM_USO, grupoId));
         }
+    }
+
+    @Transactional
+    public void desassociarPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = buscarOuFalhar(grupoId);
+        Permissao permissao = cadastroPermissao.buscarOuFalhar(permissaoId);
+
+        grupo.removerPermissao(permissao);
+    }
+
+    @Transactional
+    public void associarPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = buscarOuFalhar(grupoId);
+        Permissao permissao = cadastroPermissao.buscarOuFalhar(permissaoId);
+
+        grupo.adicionarPermissao(permissao);
     }
 
     public Grupo buscarOuFalhar(Long grupoId) {

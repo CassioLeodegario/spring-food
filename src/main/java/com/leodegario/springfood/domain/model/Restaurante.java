@@ -10,6 +10,7 @@ import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -51,7 +52,7 @@ public class Restaurante {
         joinColumns = @JoinColumn(name = "restaurante_id"),
         inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id")
     )
-    private List<FormaPagamento> formasPagamento;
+    private Set<FormaPagamento> formasPagamento;
 
     @OneToMany(mappedBy = "restaurante")
     private List<Produto> produtos;
@@ -62,6 +63,14 @@ public class Restaurante {
 
     public void inativar(){
         setAtivo(false);
+    }
+
+    public boolean adicionarFormaPagamento(FormaPagamento formaPagamento){
+        return getFormasPagamento().add(formaPagamento);
+    }
+
+    public boolean removerFormaPagamento(FormaPagamento formaPagamento){
+        return getFormasPagamento().remove(formaPagamento);
     }
 
 }

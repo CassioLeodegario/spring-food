@@ -3,6 +3,7 @@ package com.leodegario.springfood.domain.service;
 import com.leodegario.springfood.domain.exception.RestauranteNaoEncontradoException;
 import com.leodegario.springfood.domain.model.Cidade;
 import com.leodegario.springfood.domain.model.Cozinha;
+import com.leodegario.springfood.domain.model.FormaPagamento;
 import com.leodegario.springfood.domain.model.Restaurante;
 import com.leodegario.springfood.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class CadastroRestauranteService {
 
     @Autowired
     private CadastroCidadeService cadastroCidadeService;
+
+    @Autowired
+    private CadastroFormaPagamentoService cadastroFormaPagamentoService;
 
     @Transactional
     public Restaurante salvar(Restaurante restaurante) {
@@ -47,6 +51,24 @@ public class CadastroRestauranteService {
     public void inativar(Long restauranteId) {
         Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
         restauranteAtual.inativar();
+    }
+
+    @Transactional
+    public void desassociarFormaPagamento(Long restauranteId, Long formaPagamentoId){
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        FormaPagamento formaPagamento = cadastroFormaPagamentoService.buscarOuFalhar(formaPagamentoId);
+
+        restaurante.removerFormaPagamento(formaPagamento);
+    }
+
+    @Transactional
+    public void associarFormaPagamento(Long restauranteId, Long formaPagamentoId){
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        FormaPagamento formaPagamento = cadastroFormaPagamentoService.buscarOuFalhar(formaPagamentoId);
+
+
+
+        restaurante.adicionarFormaPagamento(formaPagamento);
     }
 
     public Restaurante buscarOuFalhar(Long restauranteId) {

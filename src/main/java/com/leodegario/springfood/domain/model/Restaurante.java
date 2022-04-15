@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -56,6 +57,12 @@ public class Restaurante {
     )
     private Set<FormaPagamento> formasPagamento;
 
+    @ManyToMany
+    @JoinTable(name = "restaurante_usuario_responsavel",
+            joinColumns = @JoinColumn(name = "restaurante_id"),
+            inverseJoinColumns = @JoinColumn(name = "usuario_id"))
+    private Set<Usuario> responsaveis = new HashSet<>();
+
     @OneToMany(mappedBy = "restaurante")
     private List<Produto> produtos;
 
@@ -81,6 +88,14 @@ public class Restaurante {
 
     public boolean removerFormaPagamento(FormaPagamento formaPagamento){
         return getFormasPagamento().remove(formaPagamento);
+    }
+
+    public boolean removerResponsavel(Usuario usuario) {
+        return getResponsaveis().remove(usuario);
+    }
+
+    public boolean adicionarResponsavel(Usuario usuario) {
+        return getResponsaveis().add(usuario);
     }
 
 }

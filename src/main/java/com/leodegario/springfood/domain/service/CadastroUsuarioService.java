@@ -2,6 +2,7 @@ package com.leodegario.springfood.domain.service;
 
 import com.leodegario.springfood.domain.exception.NegocioException;
 import com.leodegario.springfood.domain.exception.UsuarioNaoEncontradoException;
+import com.leodegario.springfood.domain.model.Grupo;
 import com.leodegario.springfood.domain.model.Usuario;
 import com.leodegario.springfood.repository.UsuarioRepository;
 import net.bytebuddy.implementation.bytecode.Throw;
@@ -16,6 +17,9 @@ public class CadastroUsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private CadastroGrupoService cadastroGrupo;
     
     @Transactional
     public Usuario salvar(Usuario usuario) {
@@ -44,6 +48,22 @@ public class CadastroUsuarioService {
         }
         
         usuario.setSenha(novaSenha);
+    }
+
+    @Transactional
+    public void desassociarGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = buscarOuFalhar(usuarioId);
+        Grupo grupo = cadastroGrupo.buscarOuFalhar(grupoId);
+
+        usuario.removerGrupo(grupo);
+    }
+
+    @Transactional
+    public void associarGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = buscarOuFalhar(usuarioId);
+        Grupo grupo = cadastroGrupo.buscarOuFalhar(grupoId);
+
+        usuario.adicionarGrupo(grupo);
     }
 
     public Usuario buscarOuFalhar(Long usuarioId) {

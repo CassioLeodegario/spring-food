@@ -7,6 +7,7 @@ import com.leodegario.springfood.api.model.input.RestauranteInput;
 import com.leodegario.springfood.domain.exception.CidadeNaoEncontradaException;
 import com.leodegario.springfood.domain.exception.CozinhaNaoEncontradaException;
 import com.leodegario.springfood.domain.exception.NegocioException;
+import com.leodegario.springfood.domain.exception.RestauranteNaoEncontradoException;
 import com.leodegario.springfood.domain.model.Restaurante;
 import com.leodegario.springfood.domain.service.CadastroRestauranteService;
 import com.leodegario.springfood.repository.RestauranteRepository;
@@ -62,7 +63,7 @@ public class RestauranteController {
 
     @PutMapping("/{restauranteId}")
     public RestauranteModel atualizar(@PathVariable Long restauranteId,
-                                 @Valid @RequestBody RestauranteInput restaurante) {
+                                      @Valid @RequestBody RestauranteInput restaurante) {
         try {
             Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalhar(restauranteId);
 
@@ -76,15 +77,36 @@ public class RestauranteController {
 
     @PutMapping("/{restauranteId}/ativo")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void ativar(@PathVariable Long restauranteId){
+    public void ativar(@PathVariable Long restauranteId) {
         cadastroRestauranteService.ativar(restauranteId);
     }
 
     @DeleteMapping("/{restauranteId}/ativo")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void inativar(@PathVariable Long restauranteId){
+    public void inativar(@PathVariable Long restauranteId) {
         cadastroRestauranteService.inativar(restauranteId);
     }
+
+    @PutMapping("/ativacoes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void ativarMultiplos(@RequestBody List<Long> restauranteIds) {
+        try {
+            cadastroRestauranteService.ativar(restauranteIds);
+        } catch (RestauranteNaoEncontradoException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
+    }
+
+    @DeleteMapping("/ativacoes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void inativarMultiplos(@RequestBody List<Long> restauranteIds) {
+        try {
+            cadastroRestauranteService.inativar(restauranteIds);
+        } catch (RestauranteNaoEncontradoException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
+    }
+
 
     @PutMapping("/{restauranteId}/abertura")
     @ResponseStatus(HttpStatus.NO_CONTENT)

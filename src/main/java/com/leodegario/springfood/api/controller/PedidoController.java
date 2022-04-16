@@ -1,7 +1,9 @@
 package com.leodegario.springfood.api.controller;
 
 import com.leodegario.springfood.api.assembler.PedidoModelAssembler;
+import com.leodegario.springfood.api.assembler.PedidoResumoModelAssembler;
 import com.leodegario.springfood.api.model.PedidoModel;
+import com.leodegario.springfood.api.model.PedidoResumoModel;
 import com.leodegario.springfood.domain.model.Pedido;
 import com.leodegario.springfood.domain.service.EmissaoPedidoService;
 import com.leodegario.springfood.repository.PedidoRepository;
@@ -25,12 +27,15 @@ public class PedidoController {
     
     @Autowired
     private PedidoModelAssembler pedidoModelAssembler;
+
+    @Autowired
+    private PedidoResumoModelAssembler pedidoResumoModelAssembler;
     
     @GetMapping
-    public List<PedidoModel> listar() {
+    public List<PedidoResumoModel> listar() {
         List<Pedido> todosPedidos = pedidoRepository.findAll();
         
-        return pedidoModelAssembler.toCollectionModel(todosPedidos);
+        return pedidoResumoModelAssembler.toCollectionModel(todosPedidos);
     }
     
     @GetMapping("/{pedidoId}")

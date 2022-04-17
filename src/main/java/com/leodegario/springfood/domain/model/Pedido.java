@@ -1,5 +1,6 @@
 package com.leodegario.springfood.domain.model;
 
+import com.leodegario.springfood.domain.exception.NegocioException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -61,12 +62,28 @@ public class Pedido {
         this.valorTotal = this.subtotal.add(this.taxaFrete);
     }
 
-    public void definirFrete() {
-        setTaxaFrete(getRestaurante().getTaxaFrete());
+    public void confirmar(){
+        setStatus(StatusPedido.CONFIRMADO);
+        setDataConfirmacao(OffsetDateTime.now());
     }
 
-    public void atribuirPedidoAosItens() {
-        getItens().forEach(item -> item.setPedido(this));
+    public void entregar(){
+        setStatus(StatusPedido.ENTREGUE);
+        setDataEntrega(OffsetDateTime.now());
+    }
+
+    public void cancelar(){
+        setStatus(StatusPedido.CANCELADO);
+        setDataCancelamento(OffsetDateTime.now());
+    }
+
+    private void setStatus(StatusPedido status){
+        if(getStatus().naoPodeAlterarPara(status)){
+            throw new NegocioException(
+                    String.format("Status do Pedido %d não pode ser alterado de %s para %s",
+                            getId(), getStatus().getDescricao(), status));
+        }
+        this.status = status;
     }
 
 }

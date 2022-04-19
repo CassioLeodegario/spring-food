@@ -1,9 +1,11 @@
 package com.leodegario.springfood.api.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.leodegario.springfood.api.assembler.RestauranteInputDisassembler;
 import com.leodegario.springfood.api.assembler.RestauranteModelAssembler;
 import com.leodegario.springfood.api.model.RestauranteModel;
 import com.leodegario.springfood.api.model.input.RestauranteInput;
+import com.leodegario.springfood.api.model.view.RestauranteView;
 import com.leodegario.springfood.domain.exception.CidadeNaoEncontradaException;
 import com.leodegario.springfood.domain.exception.CozinhaNaoEncontradaException;
 import com.leodegario.springfood.domain.exception.NegocioException;
@@ -14,8 +16,10 @@ import com.leodegario.springfood.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -37,10 +41,20 @@ public class RestauranteController {
     private RestauranteInputDisassembler restauranteInputDisassembler;
 
     @GetMapping
-    public ResponseEntity<List<RestauranteModel>> todos() {
+    public MappingJacksonValue todos(@RequestParam(required = false) String projecao) {
         List<Restaurante> restaurantes = restauranteRepository.findAll();
+        List<RestauranteModel> restaurantesModel = restauranteModelAssembler.toCollectionModel(restaurantes);
+        MappingJacksonValue restaurantesWrapper = new MappingJacksonValue(restaurantesModel);
 
-        return ResponseEntity.ok(restauranteModelAssembler.toCollectionModel(restaurantes));
+        restaurantesWrapper.setSerializationView(RestauranteView.Resumo.class);
+
+        if("apenas-nome".equals(projecao)){
+            restaurantesWrapper.setSerializationView(RestauranteView.ApenasNome.class);
+        }else if("completo".equals(projecao)){
+            restaurantesWrapper.setSerializationView(null);
+        }
+
+        return restaurantesWrapper;
     }
 
     @GetMapping("/{restauranteId}")

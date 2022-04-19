@@ -169,9 +169,9 @@ values (1, 5),
        (3, 5);
 
 delete
-from pedido;
-delete
 from item_pedido;
+delete
+from pedido;
 
 insert into pedido (id, codigo, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep,
                     endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro,

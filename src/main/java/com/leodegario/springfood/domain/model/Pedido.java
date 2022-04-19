@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -19,6 +20,8 @@ public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String codigo;
 
     private BigDecimal subtotal;
     private BigDecimal taxaFrete;
@@ -80,10 +83,15 @@ public class Pedido {
     private void setStatus(StatusPedido status){
         if(getStatus().naoPodeAlterarPara(status)){
             throw new NegocioException(
-                    String.format("Status do Pedido %d não pode ser alterado de %s para %s",
-                            getId(), getStatus().getDescricao(), status));
+                    String.format("Status do Pedido %s não pode ser alterado de %s para %s",
+                            getCodigo(), getStatus().getDescricao(), status));
         }
         this.status = status;
+    }
+
+    @PrePersist
+    private void gerarCodigo(){
+        setCodigo(UUID.randomUUID().toString());
     }
 
 }

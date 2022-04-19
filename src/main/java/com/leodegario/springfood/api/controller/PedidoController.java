@@ -1,5 +1,7 @@
 package com.leodegario.springfood.api.controller;
 
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.leodegario.springfood.api.assembler.PedidoInputDisassembler;
 import com.leodegario.springfood.api.assembler.PedidoModelAssembler;
 import com.leodegario.springfood.api.assembler.PedidoResumoModelAssembler;
@@ -14,6 +16,8 @@ import com.leodegario.springfood.domain.service.EmissaoPedidoService;
 import com.leodegario.springfood.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,12 +43,38 @@ public class PedidoController {
     private PedidoInputDisassembler pedidoInputDisassembler;
     
     @GetMapping
-    public List<PedidoResumoModel> listar() {
+    public MappingJacksonValue listar(
+            @RequestParam(required = false) String campos
+    ) {
         List<Pedido> todosPedidos = pedidoRepository.findAll();
-        
-        return pedidoResumoModelAssembler.toCollectionModel(todosPedidos);
+        List<PedidoResumoModel> pedidosModel = pedidoResumoModelAssembler.toCollectionModel(todosPedidos);
+
+        MappingJacksonValue pedidosWrapper = new MappingJacksonValue(pedidosModel);
+        SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+//        filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter
+//                .filterOutAllExcept("codigo", "valorTotal"));
+
+        if(campos == null || campos.trim().isEmpty()){
+            filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.serializeAll());
+        }else{
+            filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter
+                .filterOutAllExcept(campos.split(",")));
+        }
+
+        pedidosWrapper.setFilters(filterProvider);
+
+
+        return pedidosWrapper;
     }
-    
+
+//    @GetMapping
+//    public List<PedidoResumoModel> listar() {
+//        List<Pedido> todosPedidos = pedidoRepository.findAll();
+//
+//        return pedidoResumoModelAssembler.toCollectionModel(todosPedidos);
+//    }
+
+
     @GetMapping("/{pedidoId}")
     public PedidoModel buscar(@PathVariable String codigoPedido) {
         Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);

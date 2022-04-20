@@ -22,58 +22,65 @@ public class RestauranteProdutoController {
 
     @Autowired
     private ProdutoRepository produtoRepository;
-    
+
     @Autowired
     private CadastroProdutoService cadastroProduto;
-    
+
     @Autowired
     private CadastroRestauranteService cadastroRestaurante;
-    
+
     @Autowired
     private ProdutoModelAssembler produtoModelAssembler;
-    
+
     @Autowired
     private ProdutoInputDisassembler produtoInputDisassembler;
-    
+
     @GetMapping
-    public List<ProdutoModel> listar(@PathVariable Long restauranteId) {
+    public List<ProdutoModel> listar(
+            @PathVariable Long restauranteId,
+            @RequestParam(required = false) boolean incluirInativos
+    ) {
         Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
-        
-        List<Produto> todosProdutos = produtoRepository.findByRestaurante(restaurante);
-        
+        List<Produto> todosProdutos = null;
+        if (incluirInativos) {
+            todosProdutos = produtoRepository.findByRestaurante(restaurante);
+        } else {
+            todosProdutos = produtoRepository.findAtivosByRestaurante(restaurante);
+        }
+
         return produtoModelAssembler.toCollectionModel(todosProdutos);
     }
-    
+
     @GetMapping("/{produtoId}")
     public ProdutoModel buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         Produto produto = cadastroProduto.buscarOuFalhar(restauranteId, produtoId);
-        
+
         return produtoModelAssembler.toModel(produto);
     }
-    
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProdutoModel adicionar(@PathVariable Long restauranteId,
-            @RequestBody @Valid ProdutoInput produtoInput) {
+                                  @RequestBody @Valid ProdutoInput produtoInput) {
         Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
-        
+
         Produto produto = produtoInputDisassembler.toDomainObject(produtoInput);
         produto.setRestaurante(restaurante);
-        
+
         produto = cadastroProduto.salvar(produto);
-        
+
         return produtoModelAssembler.toModel(produto);
     }
-    
+
     @PutMapping("/{produtoId}")
     public ProdutoModel atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId,
-            @RequestBody @Valid ProdutoInput produtoInput) {
+                                  @RequestBody @Valid ProdutoInput produtoInput) {
         Produto produtoAtual = cadastroProduto.buscarOuFalhar(restauranteId, produtoId);
-        
+
         produtoInputDisassembler.copyToDomainObject(produtoInput, produtoAtual);
-        
+
         produtoAtual = cadastroProduto.salvar(produtoAtual);
-        
+
         return produtoModelAssembler.toModel(produtoAtual);
-    }   
+    }
 }   

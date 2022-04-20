@@ -13,7 +13,9 @@ import com.leodegario.springfood.domain.exception.NegocioException;
 import com.leodegario.springfood.domain.model.Pedido;
 import com.leodegario.springfood.domain.model.Usuario;
 import com.leodegario.springfood.domain.service.EmissaoPedidoService;
+import com.leodegario.springfood.infrastructure.repository.spec.PedidoSpecs;
 import com.leodegario.springfood.repository.PedidoRepository;
+import com.leodegario.springfood.repository.filter.PedidoFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -68,8 +70,8 @@ public class PedidoController {
 //    }
 
     @GetMapping
-    public List<PedidoResumoModel> listar() {
-        List<Pedido> todosPedidos = pedidoRepository.findAll();
+    public List<PedidoResumoModel> pesquisar(PedidoFilter filtro) {
+        List<Pedido> todosPedidos = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro));
 
         return pedidoResumoModelAssembler.toCollectionModel(todosPedidos);
     }

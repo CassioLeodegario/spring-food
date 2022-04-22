@@ -8,6 +8,10 @@ import com.leodegario.springfood.domain.model.Cozinha;
 import com.leodegario.springfood.domain.service.CadastroCozinhaService;
 import com.leodegario.springfood.repository.CozinhaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,10 +35,11 @@ public class CozinhaController {
     private CozinhaInputDisassembler cozinhaInputDisassembler;
 
     @GetMapping
-    public List<CozinhaModel> listar() {
-        List<Cozinha> todasCozinhas = cozinhaRepository.findAll();
+    public Page<CozinhaModel> listar(@PageableDefault(size = 5) Pageable pageable) {
+        Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
 
-        return cozinhaModelAssembler.toCollectionModel(todasCozinhas);
+        List<CozinhaModel> cozinhasModel = cozinhaModelAssembler.toCollectionModel(cozinhasPage.getContent());
+        return new PageImpl<>(cozinhasModel, pageable, cozinhasPage.getTotalElements());
     }
 
     @GetMapping("/{cozinhaId}")

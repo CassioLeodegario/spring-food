@@ -1,11 +1,13 @@
 package com.leodegario.springfood.api.controller;
 
+import com.google.common.collect.ImmutableMap;
 import com.leodegario.springfood.api.assembler.PedidoInputDisassembler;
 import com.leodegario.springfood.api.assembler.PedidoModelAssembler;
 import com.leodegario.springfood.api.assembler.PedidoResumoModelAssembler;
 import com.leodegario.springfood.api.model.PedidoModel;
 import com.leodegario.springfood.api.model.PedidoResumoModel;
 import com.leodegario.springfood.api.model.input.PedidoInput;
+import com.leodegario.springfood.core.data.PageableTranslator;
 import com.leodegario.springfood.domain.exception.EntidadeNaoEncontradaException;
 import com.leodegario.springfood.domain.exception.NegocioException;
 import com.leodegario.springfood.domain.model.Pedido;
@@ -47,6 +49,7 @@ public class PedidoController {
     @GetMapping
     public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro,
                                              @PageableDefault(size = 10) Pageable pageable) {
+        pageable = traduzirPageable(pageable);
         Page<Pedido> pedidosPage = pedidoRepository.findAll(
                 PedidoSpecs.usandoFiltro(filtro), pageable);
 
@@ -80,5 +83,15 @@ public class PedidoController {
         } catch (EntidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
+    }
+
+    private Pageable traduzirPageable(Pageable pageable){
+        var mapeamento = ImmutableMap.of(
+                "codigo", "codigo",
+                "restaurante.nome", "restaurante.nome",
+                "nomeCliente", "cliente.nome",
+                "valorTotal", "valorTotal"
+        );
+        return PageableTranslator.translate(pageable, mapeamento);
     }
 }           

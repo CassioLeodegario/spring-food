@@ -1,7 +1,7 @@
 package com.leodegario.springfood.infrastructure.repository.spec;
 
 import com.leodegario.springfood.domain.model.Pedido;
-import com.leodegario.springfood.repository.filter.PedidoFilter;
+import com.leodegario.springfood.domain.filter.PedidoFilter;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Predicate;

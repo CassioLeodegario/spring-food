@@ -15,7 +15,7 @@ import com.leodegario.springfood.domain.model.Usuario;
 import com.leodegario.springfood.domain.service.EmissaoPedidoService;
 import com.leodegario.springfood.infrastructure.repository.spec.PedidoSpecs;
 import com.leodegario.springfood.repository.PedidoRepository;
-import com.leodegario.springfood.repository.filter.PedidoFilter;
+import com.leodegario.springfood.domain.filter.PedidoFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

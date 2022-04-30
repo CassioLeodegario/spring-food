@@ -1,4 +1,4 @@
-package com.leodegario.springfood.infrastructure.repository;
+package com.leodegario.springfood.infrastructure.service.query;
 
 import com.leodegario.springfood.domain.filter.VendaDiariaFilter;
 import com.leodegario.springfood.domain.model.Pedido;

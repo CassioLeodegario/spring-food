@@ -16,7 +16,17 @@
     <properties>
         <java.version>11</java.version>
         <modelmapper.version>3.0.0</modelmapper.version>
+        <jasperreports.version>6.14.0</jasperreports.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>jasper-3rd-party</id>
+            <name>Jasper3rdParty</name>
+            <url>https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -82,6 +92,23 @@
             <groupId>com.github.bohnman</groupId>
             <artifactId>squiggly-filter-jackson</artifactId>
             <version>1.3.18</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>${jasperreports.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports-functions</artifactId>
+            <version>${jasperreports.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports-fonts</artifactId>
+            <version>${jasperreports.version}</version>
         </dependency>
     </dependencies>
 

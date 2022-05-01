@@ -1,5 +1,6 @@
 package com.leodegario.springfood.repository;
 
+import com.leodegario.springfood.domain.model.FotoProduto;
 import com.leodegario.springfood.domain.model.Produto;
 import com.leodegario.springfood.domain.model.Restaurante;
 import com.leodegario.springfood.domain.service.ProdutoRepositoryQueries;
@@ -23,5 +24,9 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long>,
 
     @Query("from Produto p where p.ativo = true and p.restaurante = :restaurante")
     List<Produto> findAtivosByRestaurante(Restaurante restaurante);
+
+    @Query("select f from FotoProduto f join f.produto p " +
+            "where p.restaurante.id = :restauranteId and p.id = :produtoId")
+    Optional<FotoProduto> findFotoById(Long restauranteId, Long produtoId);
 
 }    

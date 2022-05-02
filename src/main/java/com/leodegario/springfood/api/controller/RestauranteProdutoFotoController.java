@@ -3,16 +3,21 @@ package com.leodegario.springfood.api.controller;
 import com.leodegario.springfood.api.assembler.FotoProdutoModelAssembler;
 import com.leodegario.springfood.api.model.FotoProdutoModel;
 import com.leodegario.springfood.api.model.input.FotoProdutoInput;
+import com.leodegario.springfood.domain.exception.EntidadeNaoEncontradaException;
 import com.leodegario.springfood.domain.model.FotoProduto;
 import com.leodegario.springfood.domain.service.CadastroProdutoService;
 import com.leodegario.springfood.domain.service.CatalogoFotoProdutoService;
+import com.leodegario.springfood.domain.service.FotoStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.io.InputStream;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
@@ -26,6 +31,9 @@ public class RestauranteProdutoFotoController {
 
     @Autowired
     FotoProdutoModelAssembler fotoProdutoModelAssembler;
+
+    @Autowired
+    FotoStorageService fotoStorageService;
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public FotoProdutoModel atualizarFoto(
@@ -46,12 +54,27 @@ public class RestauranteProdutoFotoController {
         return fotoProdutoModelAssembler.toModel(catalogoFotoProduto.salvar(foto, arquivo.getInputStream()));
     }
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public FotoProdutoModel obterFotoProduto(
             @PathVariable Long restauranteId,
-            @PathVariable Long produtoId){
+            @PathVariable Long produtoId) {
         return fotoProdutoModelAssembler
                 .toModel(catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId));
+    }
+
+    @GetMapping(produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    public ResponseEntity<InputStreamResource> servirFoto(
+            @PathVariable Long restauranteId,
+            @PathVariable Long produtoId) {
+        try{
+            FotoProduto fotoProduto = catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId);
+
+            InputStream inputStream = fotoStorageService.recuperar(fotoProduto.getNomeArquivo());
+
+            return ResponseEntity.ok().body(new InputStreamResource(inputStream));
+        }catch (EntidadeNaoEncontradaException e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 package com.leodegario.springfood.domain.service;
 
+import com.leodegario.springfood.domain.exception.FotoProdutoNaoEncontradaException;
 import com.leodegario.springfood.domain.model.FotoProduto;
 import com.leodegario.springfood.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,11 @@ public class CatalogoFotoProdutoService {
         fotoStorageService.substituir(nomeArquivoExistente, novaFoto);
 
         return foto;
+    }
+
+    public FotoProduto buscarOuFalhar(Long restauranteId, Long produtoId) {
+        return produtoRepository.findFotoById(restauranteId, produtoId)
+                .orElseThrow(() -> new FotoProdutoNaoEncontradaException(restauranteId, produtoId));
     }
 
 

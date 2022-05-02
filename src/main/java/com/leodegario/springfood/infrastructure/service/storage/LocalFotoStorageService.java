@@ -15,6 +15,8 @@ public class LocalFotoStorageService implements FotoStorageService {
     @Value("${springfood.storage.local.diretorio-fotos}")
     private Path diretorioFotos;
 
+
+
     @Override
     public void armazenar(NovaFoto novaFoto) {
         try {

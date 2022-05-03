@@ -1,12 +1,12 @@
-package com.leodegario.springfood.infrastructure.service.storage;
+package com.leodegario.springfood.infrastructure.service.email;
 
-public class StorageException extends RuntimeException {
+public class EmailException extends RuntimeException {
 
-    public StorageException(String message) {
+    public EmailException(String message) {
         super(message);
     }
 
-    public StorageException(String message, Throwable cause) {
+    public EmailException(String message, Throwable cause) {
         super(message, cause);
     }
 }

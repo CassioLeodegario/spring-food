@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.net.URL;
 
 @Service
 public class S3FotoStorageService implements FotoStorageService {
@@ -44,11 +45,22 @@ public class S3FotoStorageService implements FotoStorageService {
 
     @Override
     public void remover(String nomeArquivo) {
-
+        try{
+            String caminhoArquivo = getCaminhoArquivo(nomeArquivo);
+            amazonS3.deleteObject(storageProperties.getS3().getBucket(), caminhoArquivo);
+        }catch (Exception e){
+            throw new StorageException("Não foi possível excluir arquivo na amazon S3", e);
+        }
     }
 
     @Override
-    public InputStream recuperar(String nomeArquivo) {
-        return null;
+    public FotoRecuperada recuperar(String nomeArquivo) {
+        String caminhoArquivo = getCaminhoArquivo(nomeArquivo);
+
+        URL url = amazonS3.getUrl(storageProperties.getS3().getBucket(), caminhoArquivo);
+
+        return FotoRecuperada.builder()
+                .url(url.toString())
+                .build();
     }
 }

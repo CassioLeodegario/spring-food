@@ -10,6 +10,7 @@ import com.leodegario.springfood.domain.service.CatalogoFotoProdutoService;
 import com.leodegario.springfood.domain.service.FotoStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -79,11 +80,19 @@ public class RestauranteProdutoFotoController {
 
             verificarCompatibilidade(mediaTypeFoto, mediaTypeAceitas);
 
-            InputStream inputStream = fotoStorageService.recuperar(fotoProduto.getNomeArquivo());
+            FotoStorageService.FotoRecuperada fotoRecuperada = fotoStorageService
+                    .recuperar(fotoProduto.getNomeArquivo());
+
+            if(fotoRecuperada.temUrl()){
+                return ResponseEntity
+                .status(HttpStatus.FOUND)
+                .header(HttpHeaders.LOCATION, fotoRecuperada.getUrl())
+                .build();
+            }
 
             return ResponseEntity.ok()
                     .contentType(mediaTypeFoto)
-                    .body(new InputStreamResource(inputStream));
+                    .body(new InputStreamResource(fotoRecuperada.getInputStream()));
         }catch (EntidadeNaoEncontradaException | HttpMediaTypeNotAcceptableException e){
             return ResponseEntity.notFound().build();
         }

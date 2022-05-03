@@ -7,12 +7,9 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.leodegario.springfood.core.storage.StorageProperties;
 import com.leodegario.springfood.domain.service.FotoStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.io.InputStream;
 import java.net.URL;
 
-@Service
 public class S3FotoStorageService implements FotoStorageService {
 
     @Autowired

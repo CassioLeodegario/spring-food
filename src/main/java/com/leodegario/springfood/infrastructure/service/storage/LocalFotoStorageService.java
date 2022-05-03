@@ -1,6 +1,8 @@
 package com.leodegario.springfood.infrastructure.service.storage;
 
+import com.leodegario.springfood.core.storage.StorageProperties;
 import com.leodegario.springfood.domain.service.FotoStorageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
@@ -13,9 +15,8 @@ import java.nio.file.Path;
 @Service
 public class LocalFotoStorageService implements FotoStorageService {
 
-    @Value("${springfood.storage.local.diretorio-fotos}")
-    private Path diretorioFotos;
-
+    @Autowired
+    StorageProperties storageProperties;
 
 
     @Override
@@ -53,6 +54,7 @@ public class LocalFotoStorageService implements FotoStorageService {
     }
 
     private Path getArquivoPath(String nomeArquivo) {
-        return diretorioFotos.resolve(nomeArquivo);
+        return storageProperties.getLocal().getDiretorioFotos()
+                .resolve(nomeArquivo);
     }
 }

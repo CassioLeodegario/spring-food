@@ -1,6 +1,7 @@
 package com.leodegario.springfood.core.storage;
 
 
+import com.amazonaws.regions.Regions;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -11,7 +12,7 @@ import java.nio.file.Path;
 @Getter
 @Setter
 @Component
-@ConfigurationProperties("algafood.storage")
+@ConfigurationProperties("springfood.storage")
 public class StorageProperties {
 
     private S3 s3 = new S3();
@@ -23,11 +24,13 @@ public class StorageProperties {
         private Path diretorioFotos;
     }
 
+    @Getter
+    @Setter
     public class S3{
         private String idChaveAcesso;
         private String chaveAcessoSecreta;
         private String bucket;
-        private String regiao;
+        private Regions regiao;
         private String diretorioFotos;
     }
 }

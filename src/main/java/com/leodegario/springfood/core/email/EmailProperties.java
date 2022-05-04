@@ -15,11 +15,21 @@ public class EmailProperties {
 
     private Implementacao impl = Implementacao.FAKE;
 
+    private Sandbox sandbox = new Sandbox();
+
     @NotNull
     private String remetente;
 
     public enum Implementacao {
-        SMTP, FAKE
+        SMTP, FAKE, SANDBOX
+    }
+
+    @Getter
+    @Setter
+    public class Sandbox {
+
+        private String destinatario;
+
     }
 
 }

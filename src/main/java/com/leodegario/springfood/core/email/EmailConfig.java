@@ -1,6 +1,8 @@
 package com.leodegario.springfood.core.email;
 
 import com.leodegario.springfood.domain.service.EnvioEmailService;
+import com.leodegario.springfood.infrastructure.service.email.FakeEnvioEmailService;
+import com.leodegario.springfood.infrastructure.service.email.SandboxEnvioEmailService;
 import com.leodegario.springfood.infrastructure.service.email.SmtpEnvioEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +22,8 @@ public class EmailConfig {
                 return new FakeEnvioEmailService();
             case SMTP:
                 return new SmtpEnvioEmailService();
+            case SANDBOX:
+                return new SandboxEnvioEmailService();
             default:
                 return null;
         }

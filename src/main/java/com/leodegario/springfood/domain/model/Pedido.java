@@ -1,5 +1,6 @@
 package com.leodegario.springfood.domain.model;
 
+import com.leodegario.springfood.domain.event.PedidoCanceladoEvent;
 import com.leodegario.springfood.domain.event.PedidoConfirmadoEvent;
 import com.leodegario.springfood.domain.exception.NegocioException;
 import lombok.Data;
@@ -79,9 +80,11 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
         setDataEntrega(OffsetDateTime.now());
     }
 
-    public void cancelar(){
+    public void cancelar() {
         setStatus(StatusPedido.CANCELADO);
         setDataCancelamento(OffsetDateTime.now());
+
+        registerEvent(new PedidoCanceladoEvent(this));
     }
 
     private void setStatus(StatusPedido status){

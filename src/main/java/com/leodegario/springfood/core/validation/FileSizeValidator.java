@@ -16,7 +16,6 @@ public class FileSizeValidator implements ConstraintValidator<FileSize, Multipar
     }
 
 
-    //Inicializa a instancia do validador
     @Override
     public void initialize(FileSize constraintAnnotation) {
         this.maxSize = DataSize.parse(constraintAnnotation.max());

@@ -16,7 +16,6 @@ public class EmailConfig {
 
     @Bean
     public EnvioEmailService envioEmailService() {
-        // Acho melhor usar switch aqui do que if/else if
         switch (emailProperties.getImpl()) {
             case FAKE:
                 return new FakeEnvioEmailService();

@@ -25,7 +25,6 @@ public class MultiploValidator implements ConstraintValidator<Multiplo, Number> 
     }
 
 
-    //Inicializa a instancia do validador
     @Override
     public void initialize(Multiplo constraintAnnotation) {
         this.numeroMultiplo = constraintAnnotation.numero();

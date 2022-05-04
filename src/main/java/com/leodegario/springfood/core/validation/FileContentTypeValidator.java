@@ -17,7 +17,6 @@ public class FileContentTypeValidator implements ConstraintValidator<FileContent
     }
 
 
-    //Inicializa a instancia do validador
     @Override
     public void initialize(FileContentType constraintAnnotation) {
         this.allowedList = Arrays.asList(constraintAnnotation.allowed());

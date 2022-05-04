@@ -23,7 +23,6 @@ public class CadastroUsuarioService {
     
     @Transactional
     public Usuario salvar(Usuario usuario) {
-        //detach user to avoid entity manager retrieve it from the database without being saved
         usuarioRepository.detach(usuario);
 
         Optional<Usuario> usuarioExistente = usuarioRepository

@@ -1,6 +1,7 @@
 package com.leodegario.springfood.domain.service;
 
 import com.leodegario.springfood.domain.model.Pedido;
+import com.leodegario.springfood.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,20 +14,12 @@ public class FluxoPedidoService {
     private EmissaoPedidoService emissaoPedidoService;
 
     @Autowired
-    EnvioEmailService envioEmailService;
+    private PedidoRepository pedidoRepository;
 
     public void confirmar(String codigoPedido) {
         Pedido pedido = emissaoPedidoService.buscarOuFalhar(codigoPedido);
         pedido.confirmar();
-
-        var mensagem = EnvioEmailService.Mensagem.builder()
-                .assunto(pedido.getRestaurante().getNome() + " - Pedido confirmado")
-                .corpo("pedido-confirmado.html")
-                .variavel("pedido", pedido)
-                .destinatario(pedido.getCliente().getEmail())
-                .build();
-
-        envioEmailService.enviar(mensagem);
+        pedidoRepository.save(pedido);
     }
 
     @Transactional

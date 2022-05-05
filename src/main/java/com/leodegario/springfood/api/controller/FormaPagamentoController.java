@@ -12,6 +12,7 @@ import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.tags.form.ErrorsTag;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -52,6 +53,7 @@ public class FormaPagamentoController {
 
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+
                 .body(formaPagamentoModel);
     }
 

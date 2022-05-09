@@ -9,6 +9,7 @@ import com.leodegario.springfood.domain.exception.NegocioException;
 import com.leodegario.springfood.domain.model.Cidade;
 import com.leodegario.springfood.domain.service.CadastroCidadeService;
 import com.leodegario.springfood.repository.CidadeRepository;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@Api(tags = "Cidades")
 @RestController
 @RequestMapping(value = "/cidades")
 public class CidadeController {

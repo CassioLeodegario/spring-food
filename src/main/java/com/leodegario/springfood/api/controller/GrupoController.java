@@ -2,6 +2,7 @@ package com.leodegario.springfood.api.controller;
 
 import com.leodegario.springfood.api.assembler.GrupoInputDisassembler;
 import com.leodegario.springfood.api.assembler.GrupoModelAssembler;
+import com.leodegario.springfood.api.controller.openapi.GrupoControllerOpenApi;
 import com.leodegario.springfood.api.model.GrupoModel;
 import com.leodegario.springfood.api.model.input.GrupoInput;
 import com.leodegario.springfood.domain.model.Grupo;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/grupos")
-public class GrupoController {
+public class GrupoController implements GrupoControllerOpenApi {
 
     @Autowired
     private GrupoRepository grupoRepository;

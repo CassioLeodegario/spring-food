@@ -2,9 +2,9 @@ package com.leodegario.springfood.api.controller;
 
 import com.leodegario.springfood.api.assembler.GrupoInputDisassembler;
 import com.leodegario.springfood.api.assembler.GrupoModelAssembler;
-import com.leodegario.springfood.api.controller.openapi.GrupoControllerOpenApi;
 import com.leodegario.springfood.api.model.GrupoModel;
 import com.leodegario.springfood.api.model.input.GrupoInput;
+import com.leodegario.springfood.api.openapi.controller.GrupoControllerOpenApi;
 import com.leodegario.springfood.domain.model.Grupo;
 import com.leodegario.springfood.domain.service.CadastroGrupoService;
 import com.leodegario.springfood.repository.GrupoRepository;

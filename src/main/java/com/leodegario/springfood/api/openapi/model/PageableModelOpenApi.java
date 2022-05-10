@@ -1,4 +1,4 @@
-package com.leodegario.springfood.core.openapi.model;
+package com.leodegario.springfood.api.openapi.model;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package com.leodegario.springfood.api.controller;
 
 import com.leodegario.springfood.api.assembler.CidadeInputDisassembler;
 import com.leodegario.springfood.api.assembler.CidadeModelAssembler;
-import com.leodegario.springfood.api.controller.openapi.CidadeControllerOpenApi;
+import com.leodegario.springfood.api.openapi.controller.CidadeControllerOpenApi;
 import com.leodegario.springfood.api.model.CidadeModel;
 import com.leodegario.springfood.api.model.input.CidadeInput;
 import com.leodegario.springfood.domain.exception.EstadoNaoEncontradoException;

@@ -17,7 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping("/grupos")
 public class GrupoController implements GrupoControllerOpenApi {
 
     @Autowired
@@ -31,23 +31,22 @@ public class GrupoController implements GrupoControllerOpenApi {
     
     @Autowired
     private GrupoInputDisassembler grupoInputDisassembler;
-    
-    @GetMapping
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<GrupoModel> listar() {
         List<Grupo> todosGrupos = grupoRepository.findAll();
         
         return grupoModelAssembler.toCollectionModel(todosGrupos);
     }
-    
-    @GetMapping("/{grupoId}")
+
+    @GetMapping(path = "/{grupoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public GrupoModel buscar(@PathVariable Long grupoId) {
         Grupo grupo = cadastroGrupo.buscarOuFalhar(grupoId);
         
         return grupoModelAssembler.toModel(grupo);
     }
     
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(MediaType.APPLICATION_JSON_VALUE)
     public GrupoModel adicionar(@RequestBody @Valid GrupoInput grupoInput) {
         Grupo grupo = grupoInputDisassembler.toDomainObject(grupoInput);
         
@@ -55,8 +54,8 @@ public class GrupoController implements GrupoControllerOpenApi {
         
         return grupoModelAssembler.toModel(grupo);
     }
-    
-    @PutMapping("/{grupoId}")
+
+    @PutMapping(path = "/{grupoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public GrupoModel atualizar(@PathVariable Long grupoId,
             @RequestBody @Valid GrupoInput grupoInput) {
         Grupo grupoAtual = cadastroGrupo.buscarOuFalhar(grupoId);

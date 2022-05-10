@@ -22,7 +22,7 @@ import java.util.List;
 
 @Api(tags = "Cidades")
 @RestController
-@RequestMapping(value = "/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/cidades")
 public class CidadeController implements CidadeControllerOpenApi {
 
     @Autowired
@@ -38,7 +38,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     private CidadeInputDisassembler cidadeInputDisassembler;
 
     @Override
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CidadeModel> listar() {
         List<Cidade> todasCidades = cidadeRepository.findAll();
 
@@ -46,7 +46,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     }
 
     @Override
-    @GetMapping("/{cidadeId}")
+    @GetMapping(path = "/{cidadeId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeModel buscar(
             @ApiParam(value = "ID de uma cidade", example = "1") @PathVariable Long cidadeId
     ) {
@@ -56,7 +56,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     }
 
     @Override
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeModel adicionar(
             @ApiParam(name = "corpo", value = "Representação de uma nova cidade")
@@ -74,7 +74,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     }
 
     @Override
-    @PutMapping("/{cidadeId}")
+    @PutMapping(path = "/{cidadeId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeModel atualizar(
             @ApiParam(value = "ID de uma cidade", example = "1") @PathVariable Long cidadeId,
             @ApiParam(name = "corpo", value = "Representação de uma cidade")

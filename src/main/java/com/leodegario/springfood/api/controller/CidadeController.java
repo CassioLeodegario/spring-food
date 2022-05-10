@@ -2,6 +2,7 @@ package com.leodegario.springfood.api.controller;
 
 import com.leodegario.springfood.api.assembler.CidadeInputDisassembler;
 import com.leodegario.springfood.api.assembler.CidadeModelAssembler;
+import com.leodegario.springfood.api.controller.openapi.CidadeControllerOpenApi;
 import com.leodegario.springfood.api.exceptionhandler.Problem;
 import com.leodegario.springfood.api.model.CidadeModel;
 import com.leodegario.springfood.api.model.input.CidadeInput;
@@ -16,12 +17,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.*;
 
 @Api(tags = "Cidades")
 @RestController
 @RequestMapping(value = "/cidades")
-public class CidadeController {
+public class CidadeController implements CidadeControllerOpenApi {
 
     @Autowired
     private CidadeRepository cidadeRepository;
@@ -35,7 +36,7 @@ public class CidadeController {
     @Autowired
     private CidadeInputDisassembler cidadeInputDisassembler;
 
-    @ApiOperation("Lista as Cidades")
+    @Override
     @GetMapping
     public List<CidadeModel> listar() {
         List<Cidade> todasCidades = cidadeRepository.findAll();
@@ -43,11 +44,7 @@ public class CidadeController {
         return cidadeModelAssembler.toCollectionModel(todasCidades);
     }
 
-    @ApiOperation("Busca cidade por Id")
-    @ApiResponses({
-            @ApiResponse(code = 400, message = "ID da cidade inválido", response = Problem.class),
-            @ApiResponse(code = 404, message = "Cidade não encontrada", response = Problem.class)
-    })
+    @Override
     @GetMapping("/{cidadeId}")
     public CidadeModel buscar(
             @ApiParam(value = "ID de uma cidade", example = "1") @PathVariable Long cidadeId
@@ -57,10 +54,7 @@ public class CidadeController {
         return cidadeModelAssembler.toModel(cidade);
     }
 
-    @ApiOperation("Cadastra uma cidade")
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "Cidade cadastrada")
-    })
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeModel adicionar(
@@ -78,11 +72,8 @@ public class CidadeController {
         }
     }
 
-    @ApiOperation("Atualiza uma cidade")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Cidade atualizada"),
-            @ApiResponse(code = 404, message = "Cidade não encontrada", response = Problem.class)
-    })    @PutMapping("/{cidadeId}")
+    @Override
+    @PutMapping("/{cidadeId}")
     public CidadeModel atualizar(
             @ApiParam(value = "ID de uma cidade", example = "1") @PathVariable Long cidadeId,
             @ApiParam(name = "corpo", value = "Representação de uma cidade")
@@ -101,11 +92,7 @@ public class CidadeController {
         }
     }
 
-    @ApiOperation("Exclui uma cidade")
-    @ApiResponses({
-            @ApiResponse(code = 204, message = "Cidade excluída"),
-            @ApiResponse(code = 404, message = "Cidade não encontrada", response = Problem.class)
-    })
+    @Override
     @DeleteMapping("/{cidadeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(

@@ -3,7 +3,6 @@ package com.leodegario.springfood.api.controller;
 import com.leodegario.springfood.api.assembler.CidadeInputDisassembler;
 import com.leodegario.springfood.api.assembler.CidadeModelAssembler;
 import com.leodegario.springfood.api.controller.openapi.CidadeControllerOpenApi;
-import com.leodegario.springfood.api.exceptionhandler.Problem;
 import com.leodegario.springfood.api.model.CidadeModel;
 import com.leodegario.springfood.api.model.input.CidadeInput;
 import com.leodegario.springfood.domain.exception.EstadoNaoEncontradoException;
@@ -11,17 +10,19 @@ import com.leodegario.springfood.domain.exception.NegocioException;
 import com.leodegario.springfood.domain.model.Cidade;
 import com.leodegario.springfood.domain.service.CadastroCidadeService;
 import com.leodegario.springfood.repository.CidadeRepository;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.List;
 
 @Api(tags = "Cidades")
 @RestController
-@RequestMapping(value = "/cidades")
+@RequestMapping(value = "/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CidadeController implements CidadeControllerOpenApi {
 
     @Autowired

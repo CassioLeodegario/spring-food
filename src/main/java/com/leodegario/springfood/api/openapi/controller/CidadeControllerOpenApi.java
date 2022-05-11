@@ -10,7 +10,6 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 public interface CidadeControllerOpenApi {
@@ -25,8 +24,8 @@ public interface CidadeControllerOpenApi {
     })
     @GetMapping("/{cidadeId}")
     CidadeModel buscar(
-            @ApiParam(value = "ID de uma cidade", example = "1") @PathVariable Long cidadeId
-    );
+            @ApiParam(value = "ID de uma cidade", example = "1", required = true)
+                    Long cidadeId);
 
     @ApiOperation("Cadastra uma cidade")
     @ApiResponses({
@@ -35,9 +34,8 @@ public interface CidadeControllerOpenApi {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     CidadeModel adicionar(
-            @ApiParam(name = "corpo", value = "Representação de uma nova cidade")
-            @RequestBody @Valid CidadeInput cidadeInput
-    );
+            @ApiParam(name = "corpo", value = "Representação de uma nova cidade", required = true)
+                    CidadeInput cidadeInput);
 
     @ApiOperation("Atualiza uma cidade")
     @ApiResponses({
@@ -46,10 +44,10 @@ public interface CidadeControllerOpenApi {
     })
     @PutMapping("/{cidadeId}")
     CidadeModel atualizar(
-            @ApiParam(value = "ID de uma cidade", example = "1") @PathVariable Long cidadeId,
-            @ApiParam(name = "corpo", value = "Representação de uma cidade")
-            @RequestBody @Valid CidadeInput cidadeInput
-    );
+            @ApiParam(value = "ID de uma cidade", example = "1", required = true)
+                    Long cidadeId,
+            @ApiParam(name = "corpo", value = "Representação de uma cidade com os novos dados")
+                    CidadeInput cidadeInput);
 
     @ApiOperation("Exclui uma cidade")
     @ApiResponses({
@@ -59,6 +57,6 @@ public interface CidadeControllerOpenApi {
     @DeleteMapping("/{cidadeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void remover(
-            @ApiParam(value = "ID de uma cidade", example = "1") @PathVariable Long cidadeId
-    );
+            @ApiParam(value = "ID de uma cidade", example = "1", required = true)
+                    Long cidadeId);
 }

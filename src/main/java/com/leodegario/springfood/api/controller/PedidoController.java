@@ -7,15 +7,16 @@ import com.leodegario.springfood.api.assembler.PedidoResumoModelAssembler;
 import com.leodegario.springfood.api.model.PedidoModel;
 import com.leodegario.springfood.api.model.PedidoResumoModel;
 import com.leodegario.springfood.api.model.input.PedidoInput;
+import com.leodegario.springfood.api.openapi.controller.PedidoControllerOpenApi;
 import com.leodegario.springfood.core.data.PageableTranslator;
 import com.leodegario.springfood.domain.exception.EntidadeNaoEncontradaException;
 import com.leodegario.springfood.domain.exception.NegocioException;
+import com.leodegario.springfood.domain.filter.PedidoFilter;
 import com.leodegario.springfood.domain.model.Pedido;
 import com.leodegario.springfood.domain.model.Usuario;
 import com.leodegario.springfood.domain.service.EmissaoPedidoService;
 import com.leodegario.springfood.infrastructure.repository.spec.PedidoSpecs;
 import com.leodegario.springfood.repository.PedidoRepository;
-import com.leodegario.springfood.domain.filter.PedidoFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -29,7 +30,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/pedidos")
-public class PedidoController {
+public class PedidoController implements PedidoControllerOpenApi {
 
     @Autowired
     private PedidoRepository pedidoRepository;

@@ -1,21 +1,21 @@
 package com.leodegario.springfood.api.controller;
 
-import com.amazonaws.services.s3.Headers;
 import com.leodegario.springfood.api.assembler.FormaPagamentoInputDisassembler;
 import com.leodegario.springfood.api.assembler.FormaPagamentoModelAssembler;
 import com.leodegario.springfood.api.model.FormaPagamentoModel;
 import com.leodegario.springfood.api.model.input.FormaPagamentoInput;
+import com.leodegario.springfood.api.openapi.controller.FormaPagamentoControllerOpenApi;
 import com.leodegario.springfood.domain.model.FormaPagamento;
 import com.leodegario.springfood.domain.service.CadastroFormaPagamentoService;
 import com.leodegario.springfood.repository.FormaPagamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
-import org.springframework.web.servlet.tags.form.ErrorsTag;
 
 import javax.validation.Valid;
 import java.time.OffsetDateTime;
@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/formas-pagamento")
-public class FormaPagamentoController {
+public class FormaPagamentoController implements FormaPagamentoControllerOpenApi {
 
     @Autowired
     private FormaPagamentoRepository formaPagamentoRepository;
@@ -38,7 +38,7 @@ public class FormaPagamentoController {
     @Autowired
     private FormaPagamentoInputDisassembler formaPagamentoInputDisassembler;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<FormaPagamentoModel>> listar(ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 
@@ -64,7 +64,7 @@ public class FormaPagamentoController {
                 .body(formasPagamentoModel);
     }
 
-    @GetMapping("/{formaPagamentoId}")
+    @GetMapping(value = "/{formaPagamentoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<FormaPagamentoModel> buscar(@PathVariable Long formaPagamentoId,
                                                       ServletWebRequest request) {
 
@@ -93,7 +93,7 @@ public class FormaPagamentoController {
                 .body(formaPagamentoModel);
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public FormaPagamentoModel adicionar(@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
         FormaPagamento formaPagamento = formaPagamentoInputDisassembler.toDomainObject(formaPagamentoInput);
@@ -103,7 +103,7 @@ public class FormaPagamentoController {
         return formaPagamentoModelAssembler.toModel(formaPagamento);
     }
 
-    @PutMapping("/{formaPagamentoId}")
+    @PutMapping(value = "/{formaPagamentoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public FormaPagamentoModel atualizar(@PathVariable Long formaPagamentoId,
                                          @RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
         FormaPagamento formaPagamentoAtual = cadastroFormaPagamento.buscarOuFalhar(formaPagamentoId);

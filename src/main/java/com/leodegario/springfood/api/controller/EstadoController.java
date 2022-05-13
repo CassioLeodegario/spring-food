@@ -4,6 +4,7 @@ import com.leodegario.springfood.api.assembler.EstadoInputDisassembler;
 import com.leodegario.springfood.api.assembler.EstadoModelAssembler;
 import com.leodegario.springfood.api.model.EstadoModel;
 import com.leodegario.springfood.api.model.input.EstadoInput;
+import com.leodegario.springfood.api.openapi.controller.EstadoControllerOpenApi;
 import com.leodegario.springfood.domain.model.Estado;
 import com.leodegario.springfood.domain.service.CadastroEstadoService;
 import com.leodegario.springfood.repository.EstadoRepository;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/estados")
-public class EstadoController {
+public class EstadoController implements EstadoControllerOpenApi {
 
     @Autowired
     private EstadoRepository estadoRepository;

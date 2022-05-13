@@ -1,5 +1,6 @@
 package com.leodegario.springfood.api.controller;
 
+import com.leodegario.springfood.api.openapi.controller.EstatisticasControllerOpenApi;
 import com.leodegario.springfood.domain.filter.VendaDiariaFilter;
 import com.leodegario.springfood.domain.model.dto.VendaDiaria;
 import com.leodegario.springfood.domain.service.VendaQueryService;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/estatisticas")
-public class EstatisticasController {
+public class EstatisticasController implements EstatisticasControllerOpenApi {
 
     @Autowired
     private VendaQueryService vendaQueryService;

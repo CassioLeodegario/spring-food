@@ -2,6 +2,7 @@ package com.leodegario.springfood.api.controller;
 
 import com.leodegario.springfood.api.assembler.GrupoModelAssembler;
 import com.leodegario.springfood.api.model.GrupoModel;
+import com.leodegario.springfood.api.openapi.controller.UsuarioGrupoControllerOpenApi;
 import com.leodegario.springfood.domain.model.Usuario;
 import com.leodegario.springfood.domain.service.CadastroUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/usuarios/{usuarioId}/grupos")
-public class UsuarioGrupoController {
+public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 
     @Autowired
     private CadastroUsuarioService cadastroUsuario;

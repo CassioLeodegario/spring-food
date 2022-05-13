@@ -6,6 +6,7 @@ import com.leodegario.springfood.api.model.UsuarioModel;
 import com.leodegario.springfood.api.model.input.SenhaInput;
 import com.leodegario.springfood.api.model.input.UsuarioComSenhaInput;
 import com.leodegario.springfood.api.model.input.UsuarioInput;
+import com.leodegario.springfood.api.openapi.controller.UsuarioControllerOpenApi;
 import com.leodegario.springfood.domain.model.Usuario;
 import com.leodegario.springfood.domain.service.CadastroUsuarioService;
 import com.leodegario.springfood.repository.UsuarioRepository;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/usuarios")
-public class UsuarioController {
+public class UsuarioController implements UsuarioControllerOpenApi {
 
     @Autowired
     private UsuarioRepository usuarioRepository;

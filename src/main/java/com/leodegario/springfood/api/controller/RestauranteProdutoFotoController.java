@@ -44,10 +44,9 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
     public FotoProdutoModel atualizarFoto(
             @PathVariable Long restauranteId,
             @PathVariable Long produtoId,
-            @Valid FotoProdutoInput fotoProdutoInput) throws IOException {
+            @Valid FotoProdutoInput fotoProdutoInput,
+            @RequestPart(required = true) MultipartFile arquivo) throws IOException {
         var produto = cadastroProdutoService.buscarOuFalhar(restauranteId, produtoId);
-
-        MultipartFile arquivo = fotoProdutoInput.getArquivo();
 
         FotoProduto foto = new FotoProduto();
         foto.setProduto(produto);

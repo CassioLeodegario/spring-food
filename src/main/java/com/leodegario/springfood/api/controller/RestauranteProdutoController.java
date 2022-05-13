@@ -4,7 +4,7 @@ import com.leodegario.springfood.api.assembler.ProdutoInputDisassembler;
 import com.leodegario.springfood.api.assembler.ProdutoModelAssembler;
 import com.leodegario.springfood.api.model.ProdutoModel;
 import com.leodegario.springfood.api.model.input.ProdutoInput;
-import com.leodegario.springfood.api.openapi.RestauranteProdutoControllerOpenApi;
+import com.leodegario.springfood.api.openapi.controller.RestauranteProdutoControllerOpenApi;
 import com.leodegario.springfood.domain.model.Produto;
 import com.leodegario.springfood.domain.model.Restaurante;
 import com.leodegario.springfood.domain.service.CadastroProdutoService;

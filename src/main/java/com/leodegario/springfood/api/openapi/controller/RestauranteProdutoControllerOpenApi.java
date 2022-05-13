@@ -1,4 +1,4 @@
-package com.leodegario.springfood.api.openapi;
+package com.leodegario.springfood.api.openapi.controller;
 
 import com.leodegario.springfood.api.exceptionhandler.Problem;
 import com.leodegario.springfood.api.model.ProdutoModel;

@@ -3,6 +3,7 @@ package com.leodegario.springfood.api.controller;
 import com.leodegario.springfood.api.assembler.FotoProdutoModelAssembler;
 import com.leodegario.springfood.api.model.FotoProdutoModel;
 import com.leodegario.springfood.api.model.input.FotoProdutoInput;
+import com.leodegario.springfood.api.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
 import com.leodegario.springfood.domain.exception.EntidadeNaoEncontradaException;
 import com.leodegario.springfood.domain.model.FotoProduto;
 import com.leodegario.springfood.domain.service.CadastroProdutoService;
@@ -25,7 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
-public class RestauranteProdutoFotoController {
+public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
 
     @Autowired
     CatalogoFotoProdutoService catalogoFotoProduto;
@@ -59,15 +60,15 @@ public class RestauranteProdutoFotoController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public FotoProdutoModel obterFotoProduto(
+    public FotoProdutoModel buscar(
             @PathVariable Long restauranteId,
             @PathVariable Long produtoId) {
         return fotoProdutoModelAssembler
                 .toModel(catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId));
     }
 
-    @GetMapping
-    public ResponseEntity<InputStreamResource> servirFoto(
+    @GetMapping(produces = MediaType.ALL_VALUE)
+    public ResponseEntity<InputStreamResource> servir(
             @PathVariable Long restauranteId,
             @PathVariable Long produtoId,
             @RequestHeader(name= "Accept") String acceptHeader

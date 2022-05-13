@@ -1,5 +1,6 @@
 package com.leodegario.springfood.api.controller;
 
+import com.leodegario.springfood.api.openapi.controller.FluxoPedidoControllerOpenApi;
 import com.leodegario.springfood.domain.service.FluxoPedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -7,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/pedidos/{codigoPedido}")
-public class FluxoPedidoController {
+public class FluxoPedidoController implements FluxoPedidoControllerOpenApi {
 
     @Autowired
     private FluxoPedidoService fluxoPedidoService;

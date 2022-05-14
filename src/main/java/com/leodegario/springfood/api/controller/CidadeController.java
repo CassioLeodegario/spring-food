@@ -1,5 +1,6 @@
 package com.leodegario.springfood.api.controller;
 
+import com.leodegario.springfood.api.ResourceUriHelper;
 import com.leodegario.springfood.api.assembler.CidadeInputDisassembler;
 import com.leodegario.springfood.api.assembler.CidadeModelAssembler;
 import com.leodegario.springfood.api.openapi.controller.CidadeControllerOpenApi;
@@ -13,11 +14,17 @@ import com.leodegario.springfood.repository.CidadeRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @Api(tags = "Cidades")
@@ -67,7 +74,11 @@ public class CidadeController implements CidadeControllerOpenApi {
 
             cidade = cadastroCidade.salvar(cidade);
 
-            return cidadeModelAssembler.toModel(cidade);
+            CidadeModel cidadeModel = cidadeModelAssembler.toModel(cidade);
+
+            ResourceUriHelper.addUriInResponseHeader(cidadeModel.getId());
+
+            return cidadeModel;
         } catch (EstadoNaoEncontradoException e) {
             throw new NegocioException(e.getMessage(), e);
         }

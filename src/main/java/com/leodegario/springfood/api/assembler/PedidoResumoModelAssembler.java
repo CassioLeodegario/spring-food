@@ -37,7 +37,7 @@ public class PedidoResumoModelAssembler
         PedidoResumoModel pedidoModel = createModelWithId(pedido.getCodigo(), pedido);
         modelMapper.map(pedido, pedidoModel);
 
-        pedidoModel.add(springFoodLinks.linkToPedidos());
+        pedidoModel.add(springFoodLinks.linkToPedidos("pedidos"));
 
         pedidoModel.getRestaurante().add(
                 springFoodLinks.linkToRestaurante(pedido.getRestaurante().getId()));

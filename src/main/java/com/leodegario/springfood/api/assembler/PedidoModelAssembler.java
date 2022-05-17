@@ -1,5 +1,6 @@
 package com.leodegario.springfood.api.assembler;
 
+import com.leodegario.springfood.api.SpringFoodLinks;
 import com.leodegario.springfood.api.controller.*;
 import com.leodegario.springfood.api.model.PedidoModel;
 import com.leodegario.springfood.domain.model.Pedido;
@@ -25,6 +26,9 @@ public class PedidoModelAssembler
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private SpringFoodLinks springFoodLinks;
+
     public PedidoModelAssembler() {
         super(PedidoController.class, PedidoModel.class);
     }
@@ -34,23 +38,7 @@ public class PedidoModelAssembler
         PedidoModel pedidoModel = createModelWithId(pedido.getCodigo(), pedido);
         modelMapper.map(pedido, pedidoModel);
 
-        TemplateVariables pageVariables = new TemplateVariables(
-                new TemplateVariable("page", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("size", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("sort", TemplateVariable.VariableType.REQUEST_PARAM));
-
-        TemplateVariables filtroVariables = new TemplateVariables(
-                new TemplateVariable("clienteId", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("restauranteId", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("dataCriacaoInicio", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("dataCriacaoFim", TemplateVariable.VariableType.REQUEST_PARAM));
-
-        String pedidosUrl = linkTo(PedidoController.class).toUri().toString();
-
-        pedidoModel.add(Link.of(UriTemplate.of(pedidosUrl,
-                pageVariables.concat(filtroVariables)), "pedidos"));
-
-//        pedidoModel.add(linkTo(PedidoController.class).withRel("pedidos"));
+        pedidoModel.add(springFoodLinks.linkToPedidos());
 
         pedidoModel.getRestaurante().add(linkTo(methodOn(RestauranteController.class)
                 .buscar(pedido.getRestaurante().getId())).withSelfRel());

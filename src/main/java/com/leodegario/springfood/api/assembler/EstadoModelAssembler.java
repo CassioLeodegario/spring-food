@@ -1,5 +1,6 @@
 package com.leodegario.springfood.api.assembler;
 
+import com.leodegario.springfood.api.SpringFoodLinks;
 import com.leodegario.springfood.api.controller.EstadoController;
 import com.leodegario.springfood.api.model.EstadoModel;
 import com.leodegario.springfood.domain.model.Estado;
@@ -21,6 +22,9 @@ public class EstadoModelAssembler
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private SpringFoodLinks springFoodLinks;
+
     public EstadoModelAssembler() {
         super(EstadoController.class, EstadoModel.class);
     }
@@ -30,7 +34,7 @@ public class EstadoModelAssembler
         EstadoModel estadoModel = createModelWithId(estado.getId(), estado);
         modelMapper.map(estado, estadoModel);
 
-        estadoModel.add(linkTo(EstadoController.class).withRel("estados"));
+        estadoModel.add(springFoodLinks.linkToEstados("estados"));
 
         return estadoModel;
     }

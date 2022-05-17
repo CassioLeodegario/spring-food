@@ -1,5 +1,6 @@
 package com.leodegario.springfood.api.controller;
 
+import com.leodegario.springfood.api.SpringFoodLinks;
 import com.leodegario.springfood.api.assembler.UsuarioModelAssembler;
 import com.leodegario.springfood.api.model.UsuarioModel;
 import com.leodegario.springfood.api.openapi.controller.RestauranteUsuarioResponsavelControllerOpenApi;
@@ -22,15 +23,18 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     
     @Autowired
     private UsuarioModelAssembler usuarioModelAssembler;
-    
+
+    @Autowired
+    private SpringFoodLinks springFoodLinks;
+
+    @Override
     @GetMapping
     public CollectionModel<UsuarioModel> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
         return usuarioModelAssembler.toCollectionModel(restaurante.getResponsaveis())
                 .removeLinks()
-                .add(linkTo(methodOn(RestauranteUsuarioResponsavelController.class)
-                        .listar(restauranteId)).withSelfRel());
+                .add(springFoodLinks.linkToResponsaveisRestaurante(restauranteId));
     }
     
     @DeleteMapping("/{usuarioId}")

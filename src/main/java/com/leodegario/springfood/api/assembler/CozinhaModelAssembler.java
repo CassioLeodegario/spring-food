@@ -1,5 +1,6 @@
 package com.leodegario.springfood.api.assembler;
 
+import com.leodegario.springfood.api.SpringFoodLinks;
 import com.leodegario.springfood.api.controller.CozinhaController;
 import com.leodegario.springfood.api.model.CozinhaModel;
 import com.leodegario.springfood.domain.model.Cozinha;
@@ -20,6 +21,9 @@ public class CozinhaModelAssembler
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private SpringFoodLinks springFoodLinks;
+
     public CozinhaModelAssembler() {
         super(CozinhaController.class, CozinhaModel.class);
     }
@@ -29,7 +33,7 @@ public class CozinhaModelAssembler
         CozinhaModel cozinhaModel = createModelWithId(cozinha.getId(), cozinha);
         modelMapper.map(cozinha, cozinhaModel);
 
-        cozinhaModel.add(linkTo(CozinhaController.class).withRel("cozinhas"));
+        cozinhaModel.add(springFoodLinks.linkToCozinhas("cozinhas"));
 
         return cozinhaModel;
     }

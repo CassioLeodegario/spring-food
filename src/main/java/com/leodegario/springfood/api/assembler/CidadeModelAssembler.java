@@ -1,5 +1,6 @@
 package com.leodegario.springfood.api.assembler;
 
+import com.leodegario.springfood.api.SpringFoodLinks;
 import com.leodegario.springfood.api.controller.CidadeController;
 import com.leodegario.springfood.api.controller.EstadoController;
 import com.leodegario.springfood.api.model.CidadeModel;
@@ -23,6 +24,9 @@ public class CidadeModelAssembler extends RepresentationModelAssemblerSupport<Ci
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private SpringFoodLinks springFoodLinks;
+
     public CidadeModelAssembler() {
         super(CidadeController.class, CidadeModel.class);
     }
@@ -33,11 +37,9 @@ public class CidadeModelAssembler extends RepresentationModelAssemblerSupport<Ci
 
         modelMapper.map(cidade, cidadeModel);
 
-        cidadeModel.add(linkTo(methodOn(CidadeController.class)
-                .listar()).withRel("cidades"));
+        cidadeModel.add(springFoodLinks.linkToCidades("cidades"));
 
-        cidadeModel.getEstado().add(linkTo(methodOn(EstadoController.class)
-                .buscar(cidadeModel.getEstado().getId())).withSelfRel());
+        cidadeModel.getEstado().add(springFoodLinks.linkToEstado(cidadeModel.getEstado().getId()));
 
         return cidadeModel;
     }

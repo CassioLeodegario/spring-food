@@ -1,5 +1,6 @@
 package com.leodegario.springfood.api.assembler;
 
+import com.leodegario.springfood.api.SpringFoodLinks;
 import com.leodegario.springfood.api.controller.PedidoController;
 import com.leodegario.springfood.api.controller.RestauranteController;
 import com.leodegario.springfood.api.controller.UsuarioController;
@@ -24,6 +25,9 @@ public class PedidoResumoModelAssembler
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private SpringFoodLinks springFoodLinks;
+
     public PedidoResumoModelAssembler() {
         super(PedidoController.class, PedidoResumoModel.class);
     }
@@ -33,13 +37,12 @@ public class PedidoResumoModelAssembler
         PedidoResumoModel pedidoModel = createModelWithId(pedido.getCodigo(), pedido);
         modelMapper.map(pedido, pedidoModel);
 
-        pedidoModel.add(linkTo(PedidoController.class).withRel("pedidos"));
+        pedidoModel.add(springFoodLinks.linkToPedidos());
 
-        pedidoModel.getRestaurante().add(linkTo(methodOn(RestauranteController.class)
-                .buscar(pedido.getRestaurante().getId())).withSelfRel());
+        pedidoModel.getRestaurante().add(
+                springFoodLinks.linkToRestaurante(pedido.getRestaurante().getId()));
 
-        pedidoModel.getCliente().add(linkTo(methodOn(UsuarioController.class)
-                .buscar(pedido.getCliente().getId())).withSelfRel());
+        pedidoModel.getCliente().add(springFoodLinks.linkToUsuario(pedido.getCliente().getId()));
 
         return pedidoModel;
     }

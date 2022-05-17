@@ -40,6 +40,19 @@ public class PedidoModelAssembler
 
         pedidoModel.add(springFoodLinks.linkToPedidos());
 
+        if(pedido.podeSerConfirmado()) {
+            pedidoModel.add(springFoodLinks
+                    .linkToConfirmacaoPedido(pedido.getCodigo(), "confirmar"));
+        }
+
+        if(pedido.podeSerEntregue()) {
+            pedidoModel.add(springFoodLinks.linkToEntregaPedido(pedido.getCodigo(), "entregar"));
+        }
+
+        if(pedido.podeSerCancelado()) {
+            pedidoModel.add(springFoodLinks.linkToCancelamentoPedido(pedido.getCodigo(), "cancelar"));
+        }
+
         pedidoModel.getRestaurante().add(
                 springFoodLinks.linkToRestaurante(pedido.getRestaurante().getId()));
 

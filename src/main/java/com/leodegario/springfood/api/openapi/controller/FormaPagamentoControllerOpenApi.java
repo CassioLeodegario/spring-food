@@ -4,6 +4,7 @@ import com.leodegario.springfood.api.exceptionhandler.Problem;
 import com.leodegario.springfood.api.model.FormaPagamentoModel;
 import com.leodegario.springfood.api.model.input.FormaPagamentoInput;
 import io.swagger.annotations.*;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.ServletWebRequest;
 
@@ -13,8 +14,8 @@ import java.util.List;
 public interface FormaPagamentoControllerOpenApi {
 
     @ApiOperation("Lista as formas de pagamento")
-    ResponseEntity<List<FormaPagamentoModel>> listar(ServletWebRequest request);
-    
+    ResponseEntity<CollectionModel<FormaPagamentoModel>> listar(ServletWebRequest request);
+
     @ApiOperation("Busca uma forma de pagamento por ID")
     @ApiResponses({
         @ApiResponse(code = 400, message = "ID da forma de pagamento inválido", response = Problem.class),

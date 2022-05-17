@@ -29,6 +29,26 @@ public class RestauranteModelAssembler
         RestauranteModel restauranteModel = createModelWithId(restaurante.getId(), restaurante);
         modelMapper.map(restaurante, restauranteModel);
 
+        if (restaurante.ativacaoPermitida()) {
+            restauranteModel.add(
+                    springFoodLinks.linkToRestauranteAtivacao(restaurante.getId(), "ativar"));
+        }
+
+        if (restaurante.inativacaoPermitida()) {
+            restauranteModel.add(
+                    springFoodLinks.linkToRestauranteInativacao(restaurante.getId(), "inativar"));
+        }
+
+        if (restaurante.aberturaPermitida()) {
+            restauranteModel.add(
+                    springFoodLinks.linkToRestauranteAbertura(restaurante.getId(), "abrir"));
+        }
+
+        if (restaurante.fechamentoPermitido()) {
+            restauranteModel.add(
+                    springFoodLinks.linkToRestauranteFechamento(restaurante.getId(), "fechar"));
+        }
+
         restauranteModel.add(springFoodLinks.linkToRestaurantes("restaurantes"));
 
         restauranteModel.getCozinha().add(

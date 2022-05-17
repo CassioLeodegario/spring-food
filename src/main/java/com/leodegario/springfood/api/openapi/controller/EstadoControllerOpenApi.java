@@ -4,14 +4,13 @@ import com.leodegario.springfood.api.exceptionhandler.Problem;
 import com.leodegario.springfood.api.model.EstadoModel;
 import com.leodegario.springfood.api.model.input.EstadoInput;
 import io.swagger.annotations.*;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 @Api(tags = "Estados")
 public interface EstadoControllerOpenApi {
 
     @ApiOperation("Lista os estados")
-    List<EstadoModel> listar();
+    CollectionModel<EstadoModel> listar();
 
     @ApiOperation("Busca um estado por ID")
     @ApiResponses({

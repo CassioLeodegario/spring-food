@@ -11,6 +11,7 @@ import com.leodegario.springfood.domain.model.Usuario;
 import com.leodegario.springfood.domain.service.CadastroUsuarioService;
 import com.leodegario.springfood.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +35,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     private UsuarioInputDisassembler usuarioInputDisassembler;
     
     @GetMapping
-    public List<UsuarioModel> listar() {
+    public CollectionModel<UsuarioModel> listar() {
         List<Usuario> todasUsuarios = usuarioRepository.findAll();
         
         return usuarioModelAssembler.toCollectionModel(todasUsuarios);

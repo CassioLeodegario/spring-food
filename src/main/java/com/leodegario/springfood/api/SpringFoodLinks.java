@@ -171,6 +171,10 @@ public class SpringFoodLinks {
                 .buscar(cozinhaId)).withRel(rel);
     }
 
+    public Link linkToRestauranteResponsaveis(Long restauranteId) {
+        return linkToRestauranteResponsaveis(restauranteId, IanaLinkRelations.SELF.value());
+    }
+
     public Link linkToRestauranteResponsaveis(Long restauranteId, String rel) {
         return linkTo(methodOn(RestauranteUsuarioResponsavelController.class)
                 .listar(restauranteId)).withRel(rel);
@@ -212,4 +216,29 @@ public class SpringFoodLinks {
         return linkToFormasPagamento(IanaLinkRelations.SELF.value());
     }
 
+    public Link linkToRestauranteFormaPagamentoDesassociacao(
+            Long restauranteId, Long formaPagamentoId, String rel) {
+
+        return linkTo(methodOn(RestauranteFormaPagamentoController.class)
+                .desassociar(restauranteId, formaPagamentoId)).withRel(rel);
+    }
+
+    public Link linkToRestauranteFormaPagamentoAssociacao(
+            Long restauranteId, String rel) {
+
+        return linkTo(methodOn(RestauranteFormaPagamentoController.class)
+                .associar(restauranteId, null)).withRel(rel);
+    }
+
+    public Link linkToRestauranteResponsavelDesassociacao(
+            Long restauranteId, Long usuarioId, String rel) {
+
+        return linkTo(methodOn(RestauranteUsuarioResponsavelController.class)
+                .desassociar(restauranteId, usuarioId)).withRel(rel);
+    }
+
+    public Link linkToRestauranteResponsavelAssociacao(Long restauranteId, String rel) {
+        return linkTo(methodOn(RestauranteUsuarioResponsavelController.class)
+                .associar(restauranteId, null)).withRel(rel);
+    }
 }

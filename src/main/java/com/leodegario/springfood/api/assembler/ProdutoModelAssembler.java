@@ -35,6 +35,9 @@ public class ProdutoModelAssembler
 
         produtoModel.add(springFoodLinks.linkToProdutos(produto.getRestaurante().getId(), "produtos"));
 
+        produtoModel.add(springFoodLinks.linkToFotoProduto(
+                produto.getRestaurante().getId(), produto.getId(), "foto"));
+
         return produtoModel;
     }
 }

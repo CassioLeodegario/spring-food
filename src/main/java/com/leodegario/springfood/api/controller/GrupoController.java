@@ -9,6 +9,7 @@ import com.leodegario.springfood.domain.model.Grupo;
 import com.leodegario.springfood.domain.service.CadastroGrupoService;
 import com.leodegario.springfood.repository.GrupoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -32,10 +33,11 @@ public class GrupoController implements GrupoControllerOpenApi {
     @Autowired
     private GrupoInputDisassembler grupoInputDisassembler;
 
+    @Override
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<GrupoModel> listar() {
+    public CollectionModel<GrupoModel> listar() {
         List<Grupo> todosGrupos = grupoRepository.findAll();
-        
+
         return grupoModelAssembler.toCollectionModel(todosGrupos);
     }
 

@@ -3,6 +3,7 @@ package com.leodegario.springfood.api.openapi.controller;
 import com.leodegario.springfood.api.exceptionhandler.Problem;
 import com.leodegario.springfood.api.model.GrupoModel;
 import io.swagger.annotations.*;
+import org.springframework.hateoas.CollectionModel;
 
 import java.util.List;
 
@@ -11,11 +12,11 @@ public interface UsuarioGrupoControllerOpenApi {
 
     @ApiOperation("Lista os grupos associados a um usuário")
     @ApiResponses({
-        @ApiResponse(code = 404, message = "Usuário não encontrado", response = Problem.class)
+            @ApiResponse(code = 404, message = "Usuário não encontrado", response = Problem.class)
     })
-    List<GrupoModel> listar(
+    CollectionModel<GrupoModel> listar(
             @ApiParam(value = "ID do usuário", example = "1", required = true)
-            Long usuarioId);
+                    Long usuarioId);
 
     @ApiOperation("Desassociação de grupo com usuário")
     @ApiResponses({

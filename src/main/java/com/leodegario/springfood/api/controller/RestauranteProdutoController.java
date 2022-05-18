@@ -1,5 +1,6 @@
 package com.leodegario.springfood.api.controller;
 
+import com.leodegario.springfood.api.SpringFoodLinks;
 import com.leodegario.springfood.api.assembler.ProdutoInputDisassembler;
 import com.leodegario.springfood.api.assembler.ProdutoModelAssembler;
 import com.leodegario.springfood.api.model.ProdutoModel;
@@ -11,6 +12,7 @@ import com.leodegario.springfood.domain.service.CadastroProdutoService;
 import com.leodegario.springfood.domain.service.CadastroRestauranteService;
 import com.leodegario.springfood.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,20 +38,25 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     @Autowired
     private ProdutoInputDisassembler produtoInputDisassembler;
 
+    @Autowired
+    private SpringFoodLinks springFoodLinks;
+
+    @Override
     @GetMapping
-    public List<ProdutoModel> listar(
-            @PathVariable Long restauranteId,
-            @RequestParam(required = false) boolean incluirInativos
-    ) {
+    public CollectionModel<ProdutoModel> listar(@PathVariable Long restauranteId,
+                                                @RequestParam(required = false, defaultValue = "false") Boolean incluirInativos) {
         Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
+
         List<Produto> todosProdutos = null;
+
         if (incluirInativos) {
-            todosProdutos = produtoRepository.findByRestaurante(restaurante);
+            todosProdutos = produtoRepository.findTodosByRestaurante(restaurante);
         } else {
             todosProdutos = produtoRepository.findAtivosByRestaurante(restaurante);
         }
 
-        return produtoModelAssembler.toCollectionModel(todosProdutos);
+        return produtoModelAssembler.toCollectionModel(todosProdutos)
+                .add(springFoodLinks.linkToProdutos(restauranteId));
     }
 
     @GetMapping("/{produtoId}")

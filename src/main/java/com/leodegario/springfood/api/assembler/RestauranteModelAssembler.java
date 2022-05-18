@@ -29,6 +29,8 @@ public class RestauranteModelAssembler
         RestauranteModel restauranteModel = createModelWithId(restaurante.getId(), restaurante);
         modelMapper.map(restaurante, restauranteModel);
 
+        restauranteModel.add(springFoodLinks.linkToRestaurantes("restaurantes"));
+
         if (restaurante.ativacaoPermitida()) {
             restauranteModel.add(
                     springFoodLinks.linkToRestauranteAtivacao(restaurante.getId(), "ativar"));
@@ -49,13 +51,16 @@ public class RestauranteModelAssembler
                     springFoodLinks.linkToRestauranteFechamento(restaurante.getId(), "fechar"));
         }
 
-        restauranteModel.add(springFoodLinks.linkToRestaurantes("restaurantes"));
+        restauranteModel.add(springFoodLinks.linkToProdutos(restaurante.getId(), "produtos"));
 
         restauranteModel.getCozinha().add(
                 springFoodLinks.linkToCozinha(restaurante.getCozinha().getId()));
 
-        restauranteModel.getEndereco().getCidade().add(
-                springFoodLinks.linkToCidade(restaurante.getEndereco().getCidade().getId()));
+        if (restauranteModel.getEndereco() != null
+                && restauranteModel.getEndereco().getCidade() != null) {
+            restauranteModel.getEndereco().getCidade().add(
+                    springFoodLinks.linkToCidade(restaurante.getEndereco().getCidade().getId()));
+        }
 
         restauranteModel.add(springFoodLinks.linkToRestauranteFormasPagamento(restaurante.getId(),
                 "formas-pagamento"));

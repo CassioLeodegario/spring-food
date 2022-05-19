@@ -294,4 +294,15 @@ public class SpringFoodLinks {
         return linkTo(methodOn(GrupoPermissaoController.class)
                 .desassociar(grupoId, permissaoId)).withRel(rel);
     }
+
+    public Link linkToUsuarioGrupoAssociacao(Long usuarioId, String rel) {
+        return linkTo(methodOn(UsuarioGrupoController.class)
+                .associar(usuarioId, null)).withRel(rel);
+    }
+
+    public Link linkToUsuarioGrupoDesassociacao(Long usuarioId, Long grupoId, String rel) {
+        return linkTo(methodOn(UsuarioGrupoController.class)
+                .desassociar(usuarioId, grupoId)).withRel(rel);
+    }
+
 }

@@ -28,6 +28,8 @@ public class RootEntryPointController {
         rootEntryPointModel.add(springFoodLinks.linkToFormasPagamento("formas-pagamento"));
         rootEntryPointModel.add(springFoodLinks.linkToEstados("estados"));
         rootEntryPointModel.add(springFoodLinks.linkToCidades("cidades"));
+        rootEntryPointModel.add(springFoodLinks.linkToEstatisticas("estatisticas"));
+
 
         return rootEntryPointModel;
     }

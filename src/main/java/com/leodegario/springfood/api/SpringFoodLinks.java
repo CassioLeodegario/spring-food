@@ -30,6 +30,23 @@ public class SpringFoodLinks {
         return Link.of(UriTemplate.of(pedidosUrl,
                 PAGINACAO_VARIABLES.concat(filtroVariables)), rel);
     }
+    public Link linkToEstatisticasVendasDiarias(String rel) {
+        TemplateVariables filtroVariables = new TemplateVariables(
+                new TemplateVariable("restauranteId", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("dataCriacaoInicio", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("dataCriacaoFim", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("timeOffset", TemplateVariable.VariableType.REQUEST_PARAM));
+
+        String pedidosUrl = linkTo(methodOn(EstatisticasController.class)
+                .consultarVendasDiarias(null, null)).toUri().toString();
+
+        return Link.of(UriTemplate.of(pedidosUrl, filtroVariables), rel);
+    }
+
+
+    public Link linkToEstatisticas(String rel) {
+        return linkTo(EstatisticasController.class).withRel(rel);
+    }
 
     public Link linkToConfirmacaoPedido(String codigoPedido, String rel){
         return linkTo(methodOn(FluxoPedidoController.class).confirmar(codigoPedido))

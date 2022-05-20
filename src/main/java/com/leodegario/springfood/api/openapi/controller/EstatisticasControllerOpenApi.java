@@ -1,5 +1,6 @@
 package com.leodegario.springfood.api.openapi.controller;
 
+import com.leodegario.springfood.api.controller.EstatisticasController;
 import com.leodegario.springfood.domain.filter.VendaDiariaFilter;
 import com.leodegario.springfood.domain.model.dto.VendaDiaria;
 import io.swagger.annotations.*;
@@ -9,6 +10,9 @@ import java.util.List;
 
 @Api(tags = "Estatísticas")
 public interface EstatisticasControllerOpenApi {
+
+    @ApiOperation(value = "Estatísticas", hidden = true)
+    EstatisticasController.EstatisticasModel estatisticas();
 
     @ApiOperation("Consulta estatísticas de vendas diárias")
     @ApiImplicitParams({

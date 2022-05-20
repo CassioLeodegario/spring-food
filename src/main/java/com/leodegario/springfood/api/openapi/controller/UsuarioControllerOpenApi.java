@@ -1,6 +1,7 @@
 package com.leodegario.springfood.api.openapi.controller;
 
 import com.leodegario.springfood.api.exceptionhandler.Problem;
+import com.leodegario.springfood.api.model.RestauranteBasicoModel;
 import com.leodegario.springfood.api.model.UsuarioModel;
 import com.leodegario.springfood.api.model.input.SenhaInput;
 import com.leodegario.springfood.api.model.input.UsuarioComSenhaInput;
@@ -11,8 +12,12 @@ import org.springframework.hateoas.CollectionModel;
 @Api(tags = "Usuários")
 public interface UsuarioControllerOpenApi {
 
-    @ApiOperation("Lista os usuários")
-    CollectionModel<UsuarioModel> listar();
+    @ApiOperation(value = "Lista restaurantes")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "Nome da projeção de pedidos", allowableValues = "apenas-nome",
+                    name = "projecao", paramType = "query", type = "string")
+    })
+    CollectionModel<RestauranteBasicoModel> listar();
 
     @ApiOperation("Busca um usuário por ID")
     @ApiResponses({

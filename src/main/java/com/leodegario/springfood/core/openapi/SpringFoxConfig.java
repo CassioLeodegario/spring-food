@@ -5,6 +5,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.leodegario.springfood.api.exceptionhandler.Problem;
 import com.leodegario.springfood.api.model.CidadeModel;
 import com.leodegario.springfood.api.model.CozinhaModel;
+import com.leodegario.springfood.api.model.EstadoModel;
 import com.leodegario.springfood.api.model.PedidoResumoModel;
 import com.leodegario.springfood.api.openapi.model.*;
 import org.springframework.context.annotation.Bean;
@@ -78,6 +79,9 @@ public class SpringFoxConfig {
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(CollectionModel.class, CidadeModel.class),
                         CidadesModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, EstadoModel.class),
+                        EstadosModelOpenApi.class))
                 .apiInfo(apiInfo())
                 .tags(new Tag("Cidades", "Gerencia as cidades"),
                         new Tag("Grupos", "Gerencia os grupos de usuários"),

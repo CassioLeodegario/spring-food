@@ -1,25 +1,25 @@
 package com.leodegario.springfood.api.openapi.model;
 
 import com.leodegario.springfood.api.model.CidadeModel;
-import com.leodegario.springfood.api.model.CozinhaModel;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import org.springframework.hateoas.Links;
 
 import java.util.List;
 
-@ApiModel("CozinhasModel")
-public class CozinhasModelOpenApi {
+@ApiModel("CidadesModel")
+@Data
+public class CidadesModelOpenApi {
 
-    private CozinhasEmbeddedModelOpenApi _embedded;
+    private CidadeEmbeddedModelOpenApi _embedded;
     private Links _links;
-    private PageModelOpenApi page;
 
-    @ApiModel("CozinhasEmbeddeModel")
+    @ApiModel("CidadesEmbeddeModel")
     @Data
-    public static class CozinhasEmbeddedModelOpenApi{
+    public static class CidadeEmbeddedModelOpenApi{
 
         private List<CidadeModel> cidades;
 
     }
+
 }

@@ -5,6 +5,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.leodegario.springfood.api.exceptionhandler.Problem;
 import com.leodegario.springfood.api.v1.model.*;
 import com.leodegario.springfood.api.v1.openapi.model.*;
+import com.leodegario.springfood.api.v2.model.CidadeModelV2;
+import com.leodegario.springfood.api.v2.model.CozinhaModelV2;
+import com.leodegario.springfood.api.v2.openapi.model.CidadesModelV2OpenApi;
+import com.leodegario.springfood.api.v2.openapi.model.CozinhasModelV2OpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -52,9 +56,10 @@ public class SpringFoxConfig {
         TypeResolver typeResolver = new TypeResolver();
 
         return new Docket(DocumentationType.OAS_30)
+                .groupName("V1")
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.leodegario.springfood.api"))
-                .paths(PathSelectors.any())
+                .paths(PathSelectors.ant("/v1/**"))
                 .build()
                 .useDefaultResponseMessages(false)
                 .globalResponses(HttpMethod.GET, globalGetResponseMessages())
@@ -102,7 +107,7 @@ public class SpringFoxConfig {
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(CollectionModel.class, UsuarioModel.class),
                         UsuariosModelOpenApi.class))
-                .apiInfo(apiInfo())
+                .apiInfo(apiInfoV1())
                 .tags(new Tag("Cidades", "Gerencia as cidades"),
                         new Tag("Grupos", "Gerencia os grupos de usuários"),
                         new Tag("Cozinhas", "Gerencia as cozinhas"),
@@ -116,11 +121,54 @@ public class SpringFoxConfig {
                         new Tag("Permissões", "Gerencia as permissões"));
     }
 
-    public ApiInfo apiInfo() {
+    @Bean
+    public Docket apiDocketV2() {
+        var typeResolver = new TypeResolver();
+
+        return new Docket(DocumentationType.OAS_30)
+                .groupName("V2")
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.leodegario.springfood.api"))
+                .paths(PathSelectors.ant("/v2/**"))
+                .build()
+                .useDefaultResponseMessages(false)
+                .globalResponses(HttpMethod.GET, globalGetResponseMessages())
+                .globalResponses(HttpMethod.POST, globalPostPutResponseMessages())
+                .globalResponses(HttpMethod.PUT, globalPostPutResponseMessages())
+                .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
+                .additionalModels(typeResolver.resolve(Problem.class))
+                .ignoredParameterTypes(ServletWebRequest.class,
+                        URL.class, URI.class, URLStreamHandler.class, Resource.class,
+                        File.class, InputStream.class)
+                .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
+                .directModelSubstitute(Links.class, LinksModelOpenApi.class)
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(PagedModel.class, CozinhaModelV2.class),
+                        CozinhasModelV2OpenApi.class))
+
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, CidadeModelV2.class),
+                        CidadesModelV2OpenApi.class))
+                .apiInfo(apiInfoV2())
+                .tags(new Tag("Cidades", "Gerencia as cidades"),
+                        new Tag("Cozinhas", "Gerencia as cozinhas"));
+    }
+
+
+    public ApiInfo apiInfoV1() {
         return new ApiInfoBuilder()
                 .title("SpringFood API")
                 .description("Api for clients and restaurants")
                 .version("1")
+                .contact(new Contact("Springfood", "http://springfood.com", "contact@springfood.com"))
+                .build();
+    }
+
+    public ApiInfo apiInfoV2() {
+        return new ApiInfoBuilder()
+                .title("SpringFood API")
+                .description("Api for clients and restaurants")
+                .version("2")
                 .contact(new Contact("Springfood", "http://springfood.com", "contact@springfood.com"))
                 .build();
     }

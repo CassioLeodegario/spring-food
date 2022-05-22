@@ -5,6 +5,7 @@ import com.leodegario.springfood.api.v2.assembler.CidadeInputDisassemblerV2;
 import com.leodegario.springfood.api.v2.assembler.CidadeModelAssemblerV2;
 import com.leodegario.springfood.api.v2.model.CidadeModelV2;
 import com.leodegario.springfood.api.v2.model.input.CidadeInputV2;
+import com.leodegario.springfood.api.v2.openapi.controller.CidadeControllerV2OpenApi;
 import com.leodegario.springfood.domain.exception.EstadoNaoEncontradoException;
 import com.leodegario.springfood.domain.exception.NegocioException;
 import com.leodegario.springfood.domain.model.Cidade;
@@ -24,7 +25,7 @@ import java.util.List;
 @Api(tags = "Cidades")
 @RestController
 @RequestMapping(value = "/v2/cidades")
-public class CidadeControllerV2 {
+public class CidadeControllerV2 implements CidadeControllerV2OpenApi {
 
     @Autowired
     private CidadeRepository cidadeRepository;

@@ -5,7 +5,6 @@ import com.leodegario.springfood.api.v2.assembler.CidadeInputDisassemblerV2;
 import com.leodegario.springfood.api.v2.assembler.CidadeModelAssemblerV2;
 import com.leodegario.springfood.api.v2.model.CidadeModelV2;
 import com.leodegario.springfood.api.v2.model.input.CidadeInputV2;
-import com.leodegario.springfood.core.web.FoodMediaTypes;
 import com.leodegario.springfood.domain.exception.EstadoNaoEncontradoException;
 import com.leodegario.springfood.domain.exception.NegocioException;
 import com.leodegario.springfood.domain.model.Cidade;
@@ -16,6 +15,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,7 +23,7 @@ import java.util.List;
 
 @Api(tags = "Cidades")
 @RestController
-@RequestMapping(value = "/cidades")
+@RequestMapping(value = "/v2/cidades")
 public class CidadeControllerV2 {
 
     @Autowired
@@ -38,14 +38,14 @@ public class CidadeControllerV2 {
     @Autowired
     private CidadeInputDisassemblerV2 cidadeInputDisassembler;
 
-    @GetMapping(produces = FoodMediaTypes.V2_APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public CollectionModel<CidadeModelV2> listar() {
         List<Cidade> todasCidades = cidadeRepository.findAll();
 
         return cidadeModelAssembler.toCollectionModel(todasCidades);
     }
 
-    @GetMapping(path = "/{cidadeId}", produces = FoodMediaTypes.V2_APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{cidadeId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeModelV2 buscar(
             @ApiParam(value = "ID de uma cidade", example = "1") @PathVariable Long cidadeId
     ) {
@@ -54,7 +54,7 @@ public class CidadeControllerV2 {
         return cidadeModelAssembler.toModel(cidade);
     }
 
-    @PostMapping(produces = FoodMediaTypes.V2_APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeModelV2 adicionar(
             @ApiParam(name = "corpo", value = "Representação de uma nova cidade")
@@ -75,7 +75,7 @@ public class CidadeControllerV2 {
         }
     }
 
-    @PutMapping(path = "/{cidadeId}", produces = FoodMediaTypes.V2_APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/{cidadeId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CidadeModelV2 atualizar(
             @ApiParam(value = "ID de uma cidade", example = "1") @PathVariable Long cidadeId,
             @ApiParam(name = "corpo", value = "Representação de uma cidade")
@@ -94,7 +94,7 @@ public class CidadeControllerV2 {
         }
     }
 
-    @DeleteMapping(value = "/{cidadeId}", produces = FoodMediaTypes.V2_APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{cidadeId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(
             @ApiParam(value = "ID de uma cidade", example = "1") @PathVariable Long cidadeId

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/cozinhas")
+@RequestMapping("/v1/cozinhas")
 public class CozinhaController implements CozinhaControllerOpenApi {
 
     @Autowired

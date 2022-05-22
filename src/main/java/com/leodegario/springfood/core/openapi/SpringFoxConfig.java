@@ -157,8 +157,10 @@ public class SpringFoxConfig {
 
     public ApiInfo apiInfoV1() {
         return new ApiInfoBuilder()
-                .title("SpringFood API")
-                .description("Api for clients and restaurants")
+                .title("SpringFood API (Depreciada)")
+                .description("Api for clients and restaurants. <br>" +
+                        "<strong>This API version is deprecated and will no longer be supported after 01/01/2023 " +
+                        "please use the new version of the API </strong>")
                 .version("1")
                 .contact(new Contact("Springfood", "http://springfood.com", "contact@springfood.com"))
                 .build();

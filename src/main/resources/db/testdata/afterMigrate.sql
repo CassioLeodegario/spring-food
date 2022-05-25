@@ -150,12 +150,12 @@ values (1, 1),
        (3, 1);
 
 insert into usuario (id, nome, email, senha, data_cadastro)
-values (1, 'João da Silva', 'joao.ger@algafood.com', '123', utc_timestamp),
-       (2, 'Maria Joaquina', 'maria.vnd@algafood.com', '123', utc_timestamp),
-       (3, 'José Souza', 'jose.aux@algafood.com', '123', utc_timestamp),
-       (4, 'Sebastião Martins', 'sebastiao.cad@algafood.com', '123', utc_timestamp);
+values (1, 'João da Silva', 'joao.ger@algafood.com', '$2a$12$oxdq69RT0E7z.iroMo5eZuPYm6VJTADqB7B6mD9/E2bdBqPysjrDu', utc_timestamp),
+       (2, 'Maria Joaquina', 'maria.vnd@algafood.com', '$2a$12$oxdq69RT0E7z.iroMo5eZuPYm6VJTADqB7B6mD9/E2bdBqPysjrDu', utc_timestamp),
+       (3, 'José Souza', 'jose.aux@algafood.com', '$2a$12$oxdq69RT0E7z.iroMo5eZuPYm6VJTADqB7B6mD9/E2bdBqPysjrDu', utc_timestamp),
+       (4, 'Sebastião Martins', 'sebastiao.cad@algafood.com', '$2a$12$oxdq69RT0E7z.iroMo5eZuPYm6VJTADqB7B6mD9/E2bdBqPysjrDu', utc_timestamp);
 insert into usuario (id, nome, email, senha, data_cadastro)
-values (5, 'Manoel Lima', 'manoel.loja@gmail.com', '123', utc_timestamp);
+values (5, 'Manoel Lima', 'manoel.loja@gmail.com', '$2a$12$oxdq69RT0E7z.iroMo5eZuPYm6VJTADqB7B6mD9/E2bdBqPysjrDu', utc_timestamp);
 
 insert into usuario_grupo (usuario_id, grupo_id)
 values (1, 1),

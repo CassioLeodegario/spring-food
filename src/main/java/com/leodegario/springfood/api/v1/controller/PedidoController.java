@@ -9,6 +9,7 @@ import com.leodegario.springfood.api.v1.model.input.PedidoInput;
 import com.leodegario.springfood.api.v1.openapi.controller.PedidoControllerOpenApi;
 import com.leodegario.springfood.core.data.PageWrapper;
 import com.leodegario.springfood.core.data.PageableTranslator;
+import com.leodegario.springfood.core.security.SpringFoodSecurity;
 import com.leodegario.springfood.domain.exception.EntidadeNaoEncontradaException;
 import com.leodegario.springfood.domain.exception.NegocioException;
 import com.leodegario.springfood.domain.filter.PedidoFilter;
@@ -51,6 +52,9 @@ public class PedidoController implements PedidoControllerOpenApi {
     @Autowired
     private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 
+    @Autowired
+    private SpringFoodSecurity springFoodSecurity;
+
     @Override
     @GetMapping
     public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro,
@@ -80,7 +84,7 @@ public class PedidoController implements PedidoControllerOpenApi {
             Pedido novoPedido = pedidoInputDisassembler.toDomainObject(pedidoInput);
 
             novoPedido.setCliente(new Usuario());
-            novoPedido.getCliente().setId(1L);
+            novoPedido.getCliente().setId(springFoodSecurity.getUsuarioId());
 
             novoPedido = emissaoPedido.emitir(novoPedido);
 

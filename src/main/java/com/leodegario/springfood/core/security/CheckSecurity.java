@@ -64,6 +64,13 @@ public @interface CheckSecurity {
         @interface PodeBuscar {
         }
 
+        @PreAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('CONSULTAR_PEDIDOS') or "
+                + "@springFoodSecurity.getUsuarioId() == #filtro.clienteId or"
+                + "@springFoodSecurity.gerenciaRestaurante(#filtro.restauranteId))")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        @interface PodePesquisar { }
+
     }
 
 }

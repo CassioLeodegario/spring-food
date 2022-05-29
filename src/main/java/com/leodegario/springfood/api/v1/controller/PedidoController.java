@@ -56,6 +56,7 @@ public class PedidoController implements PedidoControllerOpenApi {
     @Autowired
     private SpringFoodSecurity springFoodSecurity;
 
+    @CheckSecurity.Pedidos.PodePesquisar
     @Override
     @GetMapping
     public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro,
@@ -72,7 +73,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 
 
     @CheckSecurity.Pedidos.PodeBuscar
-    @GetMapping("/{pedidoId}")
+    @GetMapping("/{codigoPedido}")
     public PedidoModel buscar(@PathVariable String codigoPedido) {
         Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
         

@@ -23,8 +23,13 @@ public class SpringFoodSecurity {
         return jwt.getClaim("usuario_id");
     }
 
-    public boolean gerenciaRestaurante(Long restauranteId){
+    public boolean gerenciaRestaurante(Long restauranteId) {
+        if (restauranteId == null) {
+            return false;
+        }
+
         return restauranteRepository.existsResponsavel(restauranteId, getUsuarioId());
     }
+
 
 }

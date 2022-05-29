@@ -20,5 +20,6 @@ public interface RestauranteRepository extends
 
     List<Restaurante> consultarPorNome(String nome, @Param("cozinhaId") Long cozinha);
 
+    boolean existsResponsavel(Long restauranteId, Long usuarioId);
 
 }

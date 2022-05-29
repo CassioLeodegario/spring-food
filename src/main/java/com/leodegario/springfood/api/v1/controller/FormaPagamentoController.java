@@ -5,6 +5,7 @@ import com.leodegario.springfood.api.v1.assembler.FormaPagamentoModelAssembler;
 import com.leodegario.springfood.api.v1.model.FormaPagamentoModel;
 import com.leodegario.springfood.api.v1.model.input.FormaPagamentoInput;
 import com.leodegario.springfood.api.v1.openapi.controller.FormaPagamentoControllerOpenApi;
+import com.leodegario.springfood.core.security.CheckSecurity;
 import com.leodegario.springfood.domain.model.FormaPagamento;
 import com.leodegario.springfood.domain.service.CadastroFormaPagamentoService;
 import com.leodegario.springfood.repository.FormaPagamentoRepository;
@@ -39,6 +40,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
     @Autowired
     private FormaPagamentoInputDisassembler formaPagamentoInputDisassembler;
 
+    @CheckSecurity.FormasPagamento.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CollectionModel<FormaPagamentoModel>> listar(ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -66,6 +68,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
                 .body(formasPagamentosModel);
     }
 
+    @CheckSecurity.FormasPagamento.PodeConsultar
     @GetMapping(value = "/{formaPagamentoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<FormaPagamentoModel> buscar(@PathVariable Long formaPagamentoId,
                                                       ServletWebRequest request) {
@@ -95,6 +98,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
                 .body(formaPagamentoModel);
     }
 
+    @CheckSecurity.FormasPagamento.PodeEditar
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public FormaPagamentoModel adicionar(@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
@@ -105,6 +109,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
         return formaPagamentoModelAssembler.toModel(formaPagamento);
     }
 
+    @CheckSecurity.FormasPagamento.PodeEditar
     @PutMapping(value = "/{formaPagamentoId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public FormaPagamentoModel atualizar(@PathVariable Long formaPagamentoId,
                                          @RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
@@ -117,6 +122,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
         return formaPagamentoModelAssembler.toModel(formaPagamentoAtual);
     }
 
+    @CheckSecurity.FormasPagamento.PodeEditar
     @DeleteMapping("/{formaPagamentoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long formaPagamentoId) {

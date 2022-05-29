@@ -4,6 +4,7 @@ import com.leodegario.springfood.api.v1.SpringFoodLinks;
 import com.leodegario.springfood.api.v1.assembler.GrupoModelAssembler;
 import com.leodegario.springfood.api.v1.model.GrupoModel;
 import com.leodegario.springfood.api.v1.openapi.controller.UsuarioGrupoControllerOpenApi;
+import com.leodegario.springfood.core.security.CheckSecurity;
 import com.leodegario.springfood.domain.model.Usuario;
 import com.leodegario.springfood.domain.service.CadastroUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
     @Autowired
     private SpringFoodLinks algaLinks;
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @Override
     @GetMapping
     public CollectionModel<GrupoModel> listar(@PathVariable Long usuarioId) {
@@ -42,6 +44,7 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
         return gruposModel;
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @Override
     @DeleteMapping("/{grupoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -51,6 +54,7 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @Override
     @PutMapping("/{grupoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

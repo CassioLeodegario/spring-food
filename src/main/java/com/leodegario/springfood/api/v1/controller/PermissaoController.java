@@ -3,6 +3,7 @@ package com.leodegario.springfood.api.v1.controller;
 import com.leodegario.springfood.api.v1.assembler.PermissaoModelAssembler;
 import com.leodegario.springfood.api.v1.model.PermissaoModel;
 import com.leodegario.springfood.api.v1.openapi.controller.PermissaoControllerOpenApi;
+import com.leodegario.springfood.core.security.CheckSecurity;
 import com.leodegario.springfood.domain.model.Permissao;
 import com.leodegario.springfood.repository.PermissaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,8 @@ public class PermissaoController implements PermissaoControllerOpenApi {
     
     @Autowired
     private PermissaoModelAssembler permissaoModelAssembler;
-    
+
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @Override
     @GetMapping
     public CollectionModel<PermissaoModel> listar() {

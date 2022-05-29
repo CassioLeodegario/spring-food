@@ -4,6 +4,7 @@ import com.leodegario.springfood.api.v1.SpringFoodLinks;
 import com.leodegario.springfood.api.v1.assembler.PermissaoModelAssembler;
 import com.leodegario.springfood.api.v1.model.PermissaoModel;
 import com.leodegario.springfood.api.v1.openapi.controller.GrupoPermissaoControllerOpenApi;
+import com.leodegario.springfood.core.security.CheckSecurity;
 import com.leodegario.springfood.domain.model.Grupo;
 import com.leodegario.springfood.domain.service.CadastroGrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
 	@Autowired
 	private SpringFoodLinks springFoodLinks;
 
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@Override
 	@GetMapping
 	public CollectionModel<PermissaoModel> listar(@PathVariable Long grupoId) {
@@ -44,6 +46,7 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
 		return permissoesModel;
 	}
 
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@Override
 	@DeleteMapping("/{permissaoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
@@ -53,6 +56,7 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
 		return ResponseEntity.noContent().build();
 	}
 
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@Override
 	@PutMapping("/{permissaoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)

@@ -1,5 +1,6 @@
 package com.leodegario.springfood.core.security;
 
+import com.leodegario.springfood.repository.PedidoRepository;
 import com.leodegario.springfood.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,9 @@ public class SpringFoodSecurity {
 
     @Autowired
     private RestauranteRepository restauranteRepository;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
 
     public Authentication getAuthentication(){
         return SecurityContextHolder.getContext().getAuthentication();
@@ -29,6 +33,10 @@ public class SpringFoodSecurity {
         }
 
         return restauranteRepository.existsResponsavel(restauranteId, getUsuarioId());
+    }
+
+    public boolean gerenciaRestauranteDoPedido(String codigoPedido) {
+        return pedidoRepository.isPedidoGerenciadoPor(codigoPedido, getUsuarioId());
     }
 
 

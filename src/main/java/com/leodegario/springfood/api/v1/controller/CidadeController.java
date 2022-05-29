@@ -6,6 +6,7 @@ import com.leodegario.springfood.api.v1.assembler.CidadeModelAssembler;
 import com.leodegario.springfood.api.v1.openapi.controller.CidadeControllerOpenApi;
 import com.leodegario.springfood.api.v1.model.CidadeModel;
 import com.leodegario.springfood.api.v1.model.input.CidadeInput;
+import com.leodegario.springfood.core.security.CheckSecurity;
 import com.leodegario.springfood.domain.exception.EstadoNaoEncontradoException;
 import com.leodegario.springfood.domain.exception.NegocioException;
 import com.leodegario.springfood.domain.model.Cidade;
@@ -40,6 +41,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     @Autowired
     private CidadeInputDisassembler cidadeInputDisassembler;
 
+    @CheckSecurity.Cidades.PodeConsultar
     @Override
     @Deprecated
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -49,6 +51,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         return cidadeModelAssembler.toCollectionModel(todasCidades);
     }
 
+    @CheckSecurity.Cidades.PodeConsultar
     @Override
     @GetMapping(path = "/{cidadeId}", produces = "application/vnd.springfood.v1+json")
     public CidadeModel buscar(
@@ -59,6 +62,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         return cidadeModelAssembler.toModel(cidade);
     }
 
+    @CheckSecurity.Cidades.PodeEditar
     @Override
     @PostMapping(produces = "application/vnd.springfood.v1+json")
     @ResponseStatus(HttpStatus.CREATED)
@@ -81,6 +85,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         }
     }
 
+    @CheckSecurity.Cidades.PodeEditar
     @Override
     @PutMapping(path = "/{cidadeId}", produces = "application/vnd.springfood.v1+json")
     public CidadeModel atualizar(

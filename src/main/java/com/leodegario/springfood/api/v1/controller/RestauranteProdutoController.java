@@ -6,6 +6,7 @@ import com.leodegario.springfood.api.v1.assembler.ProdutoModelAssembler;
 import com.leodegario.springfood.api.v1.model.ProdutoModel;
 import com.leodegario.springfood.api.v1.model.input.ProdutoInput;
 import com.leodegario.springfood.api.v1.openapi.controller.RestauranteProdutoControllerOpenApi;
+import com.leodegario.springfood.core.security.CheckSecurity;
 import com.leodegario.springfood.domain.model.Produto;
 import com.leodegario.springfood.domain.model.Restaurante;
 import com.leodegario.springfood.domain.service.CadastroProdutoService;
@@ -41,6 +42,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     @Autowired
     private SpringFoodLinks springFoodLinks;
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @Override
     @GetMapping
     public CollectionModel<ProdutoModel> listar(@PathVariable Long restauranteId,
@@ -59,6 +61,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
                 .add(springFoodLinks.linkToProdutos(restauranteId));
     }
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping("/{produtoId}")
     public ProdutoModel buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         Produto produto = cadastroProduto.buscarOuFalhar(restauranteId, produtoId);
@@ -66,6 +69,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         return produtoModelAssembler.toModel(produto);
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProdutoModel adicionar(@PathVariable Long restauranteId,
@@ -80,6 +84,8 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         return produtoModelAssembler.toModel(produto);
     }
 
+
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping("/{produtoId}")
     public ProdutoModel atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId,
                                   @RequestBody @Valid ProdutoInput produtoInput) {

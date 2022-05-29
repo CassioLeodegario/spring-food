@@ -4,6 +4,7 @@ import com.leodegario.springfood.api.v1.assembler.FotoProdutoModelAssembler;
 import com.leodegario.springfood.api.v1.model.FotoProdutoModel;
 import com.leodegario.springfood.api.v1.model.input.FotoProdutoInput;
 import com.leodegario.springfood.api.v1.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
+import com.leodegario.springfood.core.security.CheckSecurity;
 import com.leodegario.springfood.domain.exception.EntidadeNaoEncontradaException;
 import com.leodegario.springfood.domain.model.FotoProduto;
 import com.leodegario.springfood.domain.service.CadastroProdutoService;
@@ -39,6 +40,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
     @Autowired
     FotoStorageService fotoStorageService;
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public FotoProdutoModel atualizarFoto(
             @PathVariable Long restauranteId,
@@ -57,6 +59,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
         return fotoProdutoModelAssembler.toModel(catalogoFotoProduto.salvar(foto, arquivo.getInputStream()));
     }
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public FotoProdutoModel buscar(
             @PathVariable Long restauranteId,
@@ -65,6 +68,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
                 .toModel(catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId));
     }
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = MediaType.ALL_VALUE)
     public ResponseEntity<InputStreamResource> servir(
             @PathVariable Long restauranteId,
@@ -97,6 +101,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
         }
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(@PathVariable Long restauranteId,

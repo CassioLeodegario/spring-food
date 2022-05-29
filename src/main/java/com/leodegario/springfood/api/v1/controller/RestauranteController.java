@@ -9,6 +9,7 @@ import com.leodegario.springfood.api.v1.model.RestauranteBasicoModel;
 import com.leodegario.springfood.api.v1.model.RestauranteModel;
 import com.leodegario.springfood.api.v1.model.input.RestauranteInput;
 import com.leodegario.springfood.api.v1.openapi.controller.RestauranteControllerOpenApi;
+import com.leodegario.springfood.core.security.CheckSecurity;
 import com.leodegario.springfood.domain.exception.CidadeNaoEncontradaException;
 import com.leodegario.springfood.domain.exception.CozinhaNaoEncontradaException;
 import com.leodegario.springfood.domain.exception.NegocioException;
@@ -47,18 +48,21 @@ public class RestauranteController implements RestauranteControllerOpenApi {
     @Autowired
     private RestauranteApenasNomeModelAssembler restauranteApenasNomeModelAssembler;
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping
     public CollectionModel<RestauranteBasicoModel> listar() {
         return restauranteBasicoModelAssembler
                 .toCollectionModel(restauranteRepository.findAll());
     }
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(params = "projecao=apenas-nome")
     public CollectionModel<RestauranteApenasNomeModel> listarApenasNomes() {
         return restauranteApenasNomeModelAssembler
                 .toCollectionModel(restauranteRepository.findAll());
     }
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping("/{restauranteId}")
     public RestauranteModel buscar(@PathVariable Long restauranteId) {
         Restaurante restaurante = cadastroRestauranteService.buscarOuFalhar(restauranteId);
@@ -66,6 +70,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
         return restauranteModelAssembler.toModel(restaurante);
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RestauranteModel adicionar(@Valid @RequestBody RestauranteInput restauranteInput) {
@@ -77,6 +82,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
         }
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping("/{restauranteId}")
     public RestauranteModel atualizar(@PathVariable Long restauranteId,
                                       @Valid @RequestBody RestauranteInput restaurante) {
@@ -91,6 +97,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
         }
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @Override
     @PutMapping("/{restauranteId}/ativo")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -100,7 +107,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
-
+    @CheckSecurity.Restaurantes.PodeEditar
     @Override
     @DeleteMapping("/{restauranteId}/ativo")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -110,6 +117,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping("/ativacoes")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void ativarMultiplos(@RequestBody List<Long> restauranteIds) {
@@ -120,6 +128,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
         }
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @DeleteMapping("/ativacoes")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void inativarMultiplos(@RequestBody List<Long> restauranteIds) {
@@ -131,6 +140,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
     }
 
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @Override
     @PutMapping("/{restauranteId}/abertura")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -140,6 +150,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @Override
     @PutMapping("/{restauranteId}/fechamento")
     @ResponseStatus(HttpStatus.NO_CONTENT)

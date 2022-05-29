@@ -4,6 +4,7 @@ import com.leodegario.springfood.api.v1.SpringFoodLinks;
 import com.leodegario.springfood.api.v1.assembler.UsuarioModelAssembler;
 import com.leodegario.springfood.api.v1.model.UsuarioModel;
 import com.leodegario.springfood.api.v1.openapi.controller.RestauranteUsuarioResponsavelControllerOpenApi;
+import com.leodegario.springfood.core.security.CheckSecurity;
 import com.leodegario.springfood.domain.model.Restaurante;
 import com.leodegario.springfood.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     @Autowired
     private SpringFoodLinks springFoodLinks;
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @Override
     @GetMapping
     public CollectionModel<UsuarioModel> listar(@PathVariable Long restauranteId) {
@@ -45,7 +47,8 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
 
         return usuariosModel;
     }
-    
+
+    @CheckSecurity.Restaurantes.PodeEditar
     @DeleteMapping("/{usuarioId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> desassociar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
@@ -53,7 +56,8 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
 
         return ResponseEntity.noContent().build();
     }
-    
+
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping("/{usuarioId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> associar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {

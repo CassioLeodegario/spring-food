@@ -9,6 +9,7 @@ import com.leodegario.springfood.api.v1.model.input.PedidoInput;
 import com.leodegario.springfood.api.v1.openapi.controller.PedidoControllerOpenApi;
 import com.leodegario.springfood.core.data.PageWrapper;
 import com.leodegario.springfood.core.data.PageableTranslator;
+import com.leodegario.springfood.core.security.CheckSecurity;
 import com.leodegario.springfood.core.security.SpringFoodSecurity;
 import com.leodegario.springfood.domain.exception.EntidadeNaoEncontradaException;
 import com.leodegario.springfood.domain.exception.NegocioException;
@@ -70,6 +71,7 @@ public class PedidoController implements PedidoControllerOpenApi {
     }
 
 
+    @CheckSecurity.Pedidos.PodeBuscar
     @GetMapping("/{pedidoId}")
     public PedidoModel buscar(@PathVariable String codigoPedido) {
         Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);

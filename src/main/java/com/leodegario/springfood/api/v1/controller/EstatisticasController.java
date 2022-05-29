@@ -2,6 +2,7 @@ package com.leodegario.springfood.api.v1.controller;
 
 import com.leodegario.springfood.api.v1.SpringFoodLinks;
 import com.leodegario.springfood.api.v1.openapi.controller.EstatisticasControllerOpenApi;
+import com.leodegario.springfood.core.security.CheckSecurity;
 import com.leodegario.springfood.domain.filter.VendaDiariaFilter;
 import com.leodegario.springfood.domain.model.dto.VendaDiaria;
 import com.leodegario.springfood.domain.service.VendaQueryService;
@@ -31,6 +32,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
     @Autowired
     private SpringFoodLinks springFoodLinks;
 
+    @CheckSecurity.Estatisticas.PodeConsultar
     @Override
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public EstatisticasModel estatisticas() {
@@ -41,6 +43,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
         return estatisticasModel;
     }
 
+    @CheckSecurity.Estatisticas.PodeConsultar
     @GetMapping(value = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<VendaDiaria> consultarVendasDiarias(
             VendaDiariaFilter filtro,
@@ -48,6 +51,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
         return vendaQueryService.consultarVendasDiarias(filtro, timeOffset);
     }
 
+    @CheckSecurity.Estatisticas.PodeConsultar
     @GetMapping(value = "/vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> consultarVendasDiariasPdf(
             VendaDiariaFilter filtro,

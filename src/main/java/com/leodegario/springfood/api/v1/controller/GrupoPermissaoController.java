@@ -5,6 +5,7 @@ import com.leodegario.springfood.api.v1.assembler.PermissaoModelAssembler;
 import com.leodegario.springfood.api.v1.model.PermissaoModel;
 import com.leodegario.springfood.api.v1.openapi.controller.GrupoPermissaoControllerOpenApi;
 import com.leodegario.springfood.core.security.CheckSecurity;
+import com.leodegario.springfood.core.security.SpringFoodSecurity;
 import com.leodegario.springfood.domain.model.Grupo;
 import com.leodegario.springfood.domain.service.CadastroGrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
 	@Autowired
 	private SpringFoodLinks springFoodLinks;
 
+	@Autowired
+	private SpringFoodSecurity springFoodSecurity;
+
 	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@Override
 	@GetMapping
@@ -34,14 +38,18 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
 
 		CollectionModel<PermissaoModel> permissoesModel
 				= permissaoModelAssembler.toCollectionModel(grupo.getPermissoes())
-				.removeLinks()
-				.add(springFoodLinks.linkToGrupoPermissoes(grupoId))
-				.add(springFoodLinks.linkToGrupoPermissaoAssociacao(grupoId, "associar"));
+				.removeLinks();
 
-		permissoesModel.getContent().forEach(permissaoModel -> {
-			permissaoModel.add(springFoodLinks.linkToGrupoPermissaoDesassociacao(
-					grupoId, permissaoModel.getId(), "desassociar"));
-		});
+		permissoesModel.add(springFoodLinks.linkToGrupoPermissoes(grupoId));
+
+		if (springFoodSecurity.podeEditarUsuariosGruposPermissoes()) {
+			permissoesModel.add(springFoodLinks.linkToGrupoPermissaoAssociacao(grupoId, "associar"));
+
+			permissoesModel.getContent().forEach(permissaoModel -> {
+				permissaoModel.add(springFoodLinks.linkToGrupoPermissaoDesassociacao(
+						grupoId, permissaoModel.getId(), "desassociar"));
+			});
+		}
 
 		return permissoesModel;
 	}

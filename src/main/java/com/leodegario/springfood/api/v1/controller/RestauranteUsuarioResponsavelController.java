@@ -5,6 +5,7 @@ import com.leodegario.springfood.api.v1.assembler.UsuarioModelAssembler;
 import com.leodegario.springfood.api.v1.model.UsuarioModel;
 import com.leodegario.springfood.api.v1.openapi.controller.RestauranteUsuarioResponsavelControllerOpenApi;
 import com.leodegario.springfood.core.security.CheckSecurity;
+import com.leodegario.springfood.core.security.SpringFoodSecurity;
 import com.leodegario.springfood.domain.model.Restaurante;
 import com.leodegario.springfood.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,10 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     @Autowired
     private SpringFoodLinks springFoodLinks;
 
-    @CheckSecurity.Restaurantes.PodeConsultar
+    @Autowired
+    private SpringFoodSecurity springFoodSecurity;
+
+    @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @Override
     @GetMapping
     public CollectionModel<UsuarioModel> listar(@PathVariable Long restauranteId) {
@@ -36,14 +40,18 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
 
         CollectionModel<UsuarioModel> usuariosModel = usuarioModelAssembler
                 .toCollectionModel(restaurante.getResponsaveis())
-                .removeLinks()
-                .add(springFoodLinks.linkToRestauranteResponsaveis(restauranteId))
-                .add(springFoodLinks.linkToRestauranteResponsavelAssociacao(restauranteId, "associar"));
+                .removeLinks();
 
-        usuariosModel.getContent().stream().forEach(usuarioModel -> {
-            usuarioModel.add(springFoodLinks.linkToRestauranteResponsavelDesassociacao(
-                    restauranteId, usuarioModel.getId(), "desassociar"));
-        });
+        usuariosModel.add(springFoodLinks.linkToRestauranteResponsaveis(restauranteId));
+
+        if (springFoodSecurity.podeGerenciarCadastroRestaurantes()) {
+            usuariosModel.add(springFoodLinks.linkToRestauranteResponsavelAssociacao(restauranteId, "associar"));
+
+            usuariosModel.getContent().stream().forEach(usuarioModel -> {
+                usuarioModel.add(springFoodLinks.linkToRestauranteResponsavelDesassociacao(
+                        restauranteId, usuarioModel.getId(), "desassociar"));
+            });
+        }
 
         return usuariosModel;
     }

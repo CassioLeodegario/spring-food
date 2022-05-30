@@ -3,6 +3,7 @@ package com.leodegario.springfood.api.v1.assembler;
 import com.leodegario.springfood.api.v1.SpringFoodLinks;
 import com.leodegario.springfood.api.v1.controller.UsuarioController;
 import com.leodegario.springfood.api.v1.model.UsuarioModel;
+import com.leodegario.springfood.core.security.SpringFoodSecurity;
 import com.leodegario.springfood.domain.model.Usuario;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class UsuarioModelAssembler  extends RepresentationModelAssemblerSupport<
     @Autowired
     private SpringFoodLinks springFoodLinks;
 
+    @Autowired
+    private SpringFoodSecurity springFoodSecurity;
+
     public UsuarioModelAssembler() {
         super(UsuarioController.class, UsuarioModel.class);
     }
@@ -30,10 +34,11 @@ public class UsuarioModelAssembler  extends RepresentationModelAssemblerSupport<
         UsuarioModel usuarioModel = createModelWithId(usuario.getId(), usuario);
         modelMapper.map(usuario, usuarioModel);
 
-        usuarioModel.add(springFoodLinks.linkToUsuarios("usuarios"));
+        if (springFoodSecurity.podeConsultarUsuariosGruposPermissoes()) {
+            usuarioModel.add(springFoodLinks.linkToUsuarios("usuarios"));
 
-        usuarioModel.add(springFoodLinks.linkToGruposUsuario(usuario.getId(), "grupos-usuario"));
-
+            usuarioModel.add(springFoodLinks.linkToGruposUsuario(usuario.getId(), "grupos-usuario"));
+        }
         return usuarioModel;
     }
 

@@ -34,39 +34,50 @@ public class PedidoModelAssembler
         PedidoModel pedidoModel = createModelWithId(pedido.getCodigo(), pedido);
         modelMapper.map(pedido, pedidoModel);
 
-        pedidoModel.add(springFoodLinks.linkToPedidos("pedidos"));
+        if (springFoodSecurity.podePesquisarPedidos()) {
+            pedidoModel.add(springFoodLinks.linkToPedidos("pedidos"));
+        }
 
-        if(springFoodSecurity.podeGerenciarPedidos(pedido.getCodigo())) {
+        if (springFoodSecurity.podeGerenciarPedidos(pedido.getCodigo())) {
             if (pedido.podeSerConfirmado()) {
-                pedidoModel.add(springFoodLinks
-                        .linkToConfirmacaoPedido(pedido.getCodigo(), "confirmar"));
-            }
-
-            if (pedido.podeSerEntregue()) {
-                pedidoModel.add(springFoodLinks.linkToEntregaPedido(pedido.getCodigo(), "entregar"));
+                pedidoModel.add(springFoodLinks.linkToConfirmacaoPedido(pedido.getCodigo(), "confirmar"));
             }
 
             if (pedido.podeSerCancelado()) {
                 pedidoModel.add(springFoodLinks.linkToCancelamentoPedido(pedido.getCodigo(), "cancelar"));
             }
+
+            if (pedido.podeSerEntregue()) {
+                pedidoModel.add(springFoodLinks.linkToEntregaPedido(pedido.getCodigo(), "entregar"));
+            }
         }
 
-        pedidoModel.getRestaurante().add(
-                springFoodLinks.linkToRestaurante(pedido.getRestaurante().getId()));
+        if (springFoodSecurity.podeConsultarRestaurantes()) {
+            pedidoModel.getRestaurante().add(
+                    springFoodLinks.linkToRestaurante(pedido.getRestaurante().getId()));
+        }
 
-        pedidoModel.getCliente().add(
-                springFoodLinks.linkToUsuario(pedido.getCliente().getId()));
+        if (springFoodSecurity.podeConsultarUsuariosGruposPermissoes()) {
+            pedidoModel.getCliente().add(
+                    springFoodLinks.linkToUsuario(pedido.getCliente().getId()));
+        }
 
-        pedidoModel.getFormaPagamento().add(
-                springFoodLinks.linkToFormaPagamento(pedido.getFormaPagamento().getId()));
+        if (springFoodSecurity.podeConsultarFormasPagamento()) {
+            pedidoModel.getFormaPagamento().add(
+                    springFoodLinks.linkToFormaPagamento(pedido.getFormaPagamento().getId()));
+        }
 
-        pedidoModel.getEnderecoEntrega().getCidade().add(
-                springFoodLinks.linkToCidade(pedido.getEnderecoEntrega().getCidade().getId()));
+        if (springFoodSecurity.podeConsultarCidades()) {
+            pedidoModel.getEnderecoEntrega().getCidade().add(
+                    springFoodLinks.linkToCidade(pedido.getEnderecoEntrega().getCidade().getId()));
+        }
 
-        pedidoModel.getItens().forEach(item -> {
-            item.add(springFoodLinks.linkToProduto(
-                    pedidoModel.getRestaurante().getId(), item.getProdutoId(), "produto"));
-        });
+        if (springFoodSecurity.podeConsultarRestaurantes()) {
+            pedidoModel.getItens().forEach(item -> {
+                item.add(springFoodLinks.linkToProduto(
+                        pedidoModel.getRestaurante().getId(), item.getProdutoId(), "produto"));
+            });
+        }
 
         return pedidoModel;
     }

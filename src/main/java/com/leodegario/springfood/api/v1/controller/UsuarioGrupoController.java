@@ -5,6 +5,7 @@ import com.leodegario.springfood.api.v1.assembler.GrupoModelAssembler;
 import com.leodegario.springfood.api.v1.model.GrupoModel;
 import com.leodegario.springfood.api.v1.openapi.controller.UsuarioGrupoControllerOpenApi;
 import com.leodegario.springfood.core.security.CheckSecurity;
+import com.leodegario.springfood.core.security.SpringFoodSecurity;
 import com.leodegario.springfood.domain.model.Usuario;
 import com.leodegario.springfood.domain.service.CadastroUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,10 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
     private GrupoModelAssembler grupoModelAssembler;
 
     @Autowired
-    private SpringFoodLinks algaLinks;
+    private SpringFoodLinks springFoodLinks;
+
+    @Autowired
+    private SpringFoodSecurity springFoodSecurity;
 
     @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @Override
@@ -33,13 +37,16 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
         Usuario usuario = cadastroUsuario.buscarOuFalhar(usuarioId);
 
         CollectionModel<GrupoModel> gruposModel = grupoModelAssembler.toCollectionModel(usuario.getGrupos())
-                .removeLinks()
-                .add(algaLinks.linkToUsuarioGrupoAssociacao(usuarioId, "associar"));
+                .removeLinks();
 
-        gruposModel.getContent().forEach(grupoModel -> {
-            grupoModel.add(algaLinks.linkToUsuarioGrupoDesassociacao(
-                    usuarioId, grupoModel.getId(), "desassociar"));
-        });
+        if (springFoodSecurity.podeEditarUsuariosGruposPermissoes()) {
+            gruposModel.add(springFoodLinks.linkToUsuarioGrupoAssociacao(usuarioId, "associar"));
+
+            gruposModel.getContent().forEach(grupoModel -> {
+                grupoModel.add(springFoodLinks.linkToUsuarioGrupoDesassociacao(
+                        usuarioId, grupoModel.getId(), "desassociar"));
+            });
+        }
 
         return gruposModel;
     }

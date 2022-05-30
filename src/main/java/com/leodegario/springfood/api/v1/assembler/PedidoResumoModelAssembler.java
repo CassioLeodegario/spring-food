@@ -3,6 +3,7 @@ package com.leodegario.springfood.api.v1.assembler;
 import com.leodegario.springfood.api.v1.SpringFoodLinks;
 import com.leodegario.springfood.api.v1.controller.PedidoController;
 import com.leodegario.springfood.api.v1.model.PedidoResumoModel;
+import com.leodegario.springfood.core.security.SpringFoodSecurity;
 import com.leodegario.springfood.domain.model.Pedido;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class PedidoResumoModelAssembler
     @Autowired
     private SpringFoodLinks springFoodLinks;
 
+    @Autowired
+    private SpringFoodSecurity springFoodSecurity;
+
     public PedidoResumoModelAssembler() {
         super(PedidoController.class, PedidoResumoModel.class);
     }
@@ -30,12 +34,18 @@ public class PedidoResumoModelAssembler
         PedidoResumoModel pedidoModel = createModelWithId(pedido.getCodigo(), pedido);
         modelMapper.map(pedido, pedidoModel);
 
-        pedidoModel.add(springFoodLinks.linkToPedidos("pedidos"));
+        if (springFoodSecurity.podePesquisarPedidos()) {
+            pedidoModel.add(springFoodLinks.linkToPedidos("pedidos"));
+        }
 
-        pedidoModel.getRestaurante().add(
-                springFoodLinks.linkToRestaurante(pedido.getRestaurante().getId()));
+        if (springFoodSecurity.podeConsultarRestaurantes()) {
+            pedidoModel.getRestaurante().add(
+                    springFoodLinks.linkToRestaurante(pedido.getRestaurante().getId()));
+        }
 
-        pedidoModel.getCliente().add(springFoodLinks.linkToUsuario(pedido.getCliente().getId()));
+        if (springFoodSecurity.podeConsultarUsuariosGruposPermissoes()) {
+            pedidoModel.getCliente().add(springFoodLinks.linkToUsuario(pedido.getCliente().getId()));
+        }
 
         return pedidoModel;
     }

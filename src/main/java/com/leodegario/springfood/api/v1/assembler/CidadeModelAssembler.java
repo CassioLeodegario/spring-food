@@ -3,6 +3,7 @@ package com.leodegario.springfood.api.v1.assembler;
 import com.leodegario.springfood.api.v1.SpringFoodLinks;
 import com.leodegario.springfood.api.v1.controller.CidadeController;
 import com.leodegario.springfood.api.v1.model.CidadeModel;
+import com.leodegario.springfood.core.security.SpringFoodSecurity;
 import com.leodegario.springfood.domain.model.Cidade;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class CidadeModelAssembler extends RepresentationModelAssemblerSupport<Ci
     @Autowired
     private SpringFoodLinks springFoodLinks;
 
+    @Autowired
+    private SpringFoodSecurity springFoodSecurity;
+
     public CidadeModelAssembler() {
         super(CidadeController.class, CidadeModel.class);
     }
@@ -31,16 +35,25 @@ public class CidadeModelAssembler extends RepresentationModelAssemblerSupport<Ci
 
         modelMapper.map(cidade, cidadeModel);
 
-        cidadeModel.add(springFoodLinks.linkToCidades("cidades"));
+        if (springFoodSecurity.podeConsultarCidades()) {
+            cidadeModel.add(springFoodLinks.linkToCidades("cidades"));
+        }
 
-        cidadeModel.getEstado().add(springFoodLinks.linkToEstado(cidadeModel.getEstado().getId()));
+        if (springFoodSecurity.podeConsultarEstados()) {
+            cidadeModel.getEstado().add(springFoodLinks.linkToEstado(cidadeModel.getEstado().getId()));
+        }
 
         return cidadeModel;
     }
 
     @Override
     public CollectionModel<CidadeModel> toCollectionModel(Iterable<? extends Cidade> entities) {
-        return super.toCollectionModel(entities)
-                .add(springFoodLinks.linkToCidades());
+        CollectionModel<CidadeModel> collectionModel = super.toCollectionModel(entities);
+
+        if (springFoodSecurity.podeConsultarCidades()) {
+            collectionModel.add(springFoodLinks.linkToCidades());
+        }
+
+        return collectionModel;
     }
 }

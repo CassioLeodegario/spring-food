@@ -3,6 +3,7 @@ package com.leodegario.springfood.api.v1.assembler;
 import com.leodegario.springfood.api.v1.SpringFoodLinks;
 import com.leodegario.springfood.api.v1.controller.FormaPagamentoController;
 import com.leodegario.springfood.api.v1.model.FormaPagamentoModel;
+import com.leodegario.springfood.core.security.SpringFoodSecurity;
 import com.leodegario.springfood.domain.model.FormaPagamento;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class FormaPagamentoModelAssembler
     @Autowired
     private SpringFoodLinks springFoodLinks;
 
+    @Autowired
+    private SpringFoodSecurity springFoodSecurity;
+
     public FormaPagamentoModelAssembler() {
         super(FormaPagamentoController.class, FormaPagamentoModel.class);
     }
@@ -31,14 +35,21 @@ public class FormaPagamentoModelAssembler
 
         modelMapper.map(formaPagamento, formaPagamentoModel);
 
-        formaPagamentoModel.add(springFoodLinks.linkToFormasPagamento("formasPagamento"));
+        if (springFoodSecurity.podeConsultarFormasPagamento()) {
+            formaPagamentoModel.add(springFoodLinks.linkToFormasPagamento("formasPagamento"));
+        }
 
         return formaPagamentoModel;
     }
 
     @Override
     public CollectionModel<FormaPagamentoModel> toCollectionModel(Iterable<? extends FormaPagamento> entities) {
-        return super.toCollectionModel(entities)
-                .add(springFoodLinks.linkToFormasPagamento());
+        CollectionModel<FormaPagamentoModel> collectionModel = super.toCollectionModel(entities);
+
+        if (springFoodSecurity.podeConsultarFormasPagamento()) {
+            collectionModel.add(springFoodLinks.linkToFormasPagamento());
+        }
+
+        return collectionModel;
     }
 }

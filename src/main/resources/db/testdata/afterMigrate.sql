@@ -26,6 +26,7 @@ from usuario;
 delete
 from usuario_grupo;
 delete from foto_produto;
+delete from oauth_client_details;
 
 set
 foreign_key_checks = 1;

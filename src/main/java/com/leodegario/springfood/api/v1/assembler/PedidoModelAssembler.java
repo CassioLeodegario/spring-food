@@ -3,6 +3,7 @@ package com.leodegario.springfood.api.v1.assembler;
 import com.leodegario.springfood.api.v1.SpringFoodLinks;
 import com.leodegario.springfood.api.v1.controller.*;
 import com.leodegario.springfood.api.v1.model.PedidoModel;
+import com.leodegario.springfood.core.security.SpringFoodSecurity;
 import com.leodegario.springfood.domain.model.Pedido;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class PedidoModelAssembler
     @Autowired
     private SpringFoodLinks springFoodLinks;
 
+    @Autowired
+    private SpringFoodSecurity springFoodSecurity;
+
     public PedidoModelAssembler() {
         super(PedidoController.class, PedidoModel.class);
     }
@@ -32,17 +36,19 @@ public class PedidoModelAssembler
 
         pedidoModel.add(springFoodLinks.linkToPedidos("pedidos"));
 
-        if(pedido.podeSerConfirmado()) {
-            pedidoModel.add(springFoodLinks
-                    .linkToConfirmacaoPedido(pedido.getCodigo(), "confirmar"));
-        }
+        if(springFoodSecurity.podeGerenciarPedidos(pedido.getCodigo())) {
+            if (pedido.podeSerConfirmado()) {
+                pedidoModel.add(springFoodLinks
+                        .linkToConfirmacaoPedido(pedido.getCodigo(), "confirmar"));
+            }
 
-        if(pedido.podeSerEntregue()) {
-            pedidoModel.add(springFoodLinks.linkToEntregaPedido(pedido.getCodigo(), "entregar"));
-        }
+            if (pedido.podeSerEntregue()) {
+                pedidoModel.add(springFoodLinks.linkToEntregaPedido(pedido.getCodigo(), "entregar"));
+            }
 
-        if(pedido.podeSerCancelado()) {
-            pedidoModel.add(springFoodLinks.linkToCancelamentoPedido(pedido.getCodigo(), "cancelar"));
+            if (pedido.podeSerCancelado()) {
+                pedidoModel.add(springFoodLinks.linkToCancelamentoPedido(pedido.getCodigo(), "cancelar"));
+            }
         }
 
         pedidoModel.getRestaurante().add(

@@ -78,8 +78,7 @@ public @interface CheckSecurity {
         @interface PodeCriar {
         }
 
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('GERENCIAR_PEDIDOS') or "
-                + "@springFoodSecurity.gerenciaRestauranteDoPedido(#codigoPedido))")
+        @PreAuthorize("@springFoodSecurity.podeGerenciarPedidos(#codigoPedido)")
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface PodeGerenciarPedidos {

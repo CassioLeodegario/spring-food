@@ -17,11 +17,11 @@ public class SpringFoodSecurity {
     @Autowired
     private PedidoRepository pedidoRepository;
 
-    public Authentication getAuthentication(){
+    public Authentication getAuthentication() {
         return SecurityContextHolder.getContext().getAuthentication();
     }
 
-    public Long getUsuarioId(){
+    public Long getUsuarioId() {
         Jwt jwt = (Jwt) getAuthentication().getPrincipal();
 
         return jwt.getClaim("usuario_id");
@@ -39,9 +39,19 @@ public class SpringFoodSecurity {
         return pedidoRepository.isPedidoGerenciadoPor(codigoPedido, getUsuarioId());
     }
 
-    public boolean usuarioAutenticadoIgual(Long usuarioId){
+    public boolean usuarioAutenticadoIgual(Long usuarioId) {
         return getUsuarioId() != null && usuarioId != null
                 && getUsuarioId().equals(usuarioId);
+    }
+
+    public boolean hasAuthority(String authorityName) {
+        return getAuthentication().getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals(authorityName));
+    }
+
+    public boolean podeGerenciarPedidos(String codigoPedido) {
+        return hasAuthority("SCOPE_WRITE") && (hasAuthority("GERENCIAR_PEDIDOS")
+                || gerenciaRestauranteDoPedido(codigoPedido));
     }
 
 

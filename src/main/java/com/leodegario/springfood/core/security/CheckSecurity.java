@@ -57,7 +57,7 @@ public @interface CheckSecurity {
 
         @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
         @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or " +
-                "@springFoodSecurity.getUsuarioId() == returnObject.cliente.id or " +
+                "@springFoodSecurity.usuarioAutenticadoIgual(returnObject.cliente.id) or " +
                 "@springFoodSecurity.gerenciaRestaurante(returnObject.restaurante.id)")
         @Retention(RUNTIME)
         @Target(METHOD)
@@ -65,7 +65,7 @@ public @interface CheckSecurity {
         }
 
         @PreAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('CONSULTAR_PEDIDOS') or "
-                + "@springFoodSecurity.getUsuarioId() == #filtro.clienteId or"
+                + "@springFoodSecurity.usuarioAutenticadoIgual(#filtro.clienteId) or"
                 + "@springFoodSecurity.gerenciaRestaurante(#filtro.restauranteId))")
         @Retention(RUNTIME)
         @Target(METHOD)

@@ -39,5 +39,10 @@ public class SpringFoodSecurity {
         return pedidoRepository.isPedidoGerenciadoPor(codigoPedido, getUsuarioId());
     }
 
+    public boolean usuarioAutenticadoIgual(Long usuarioId){
+        return getUsuarioId() != null && usuarioId != null
+                && getUsuarioId().equals(usuarioId);
+    }
+
 
 }

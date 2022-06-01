@@ -26,6 +26,7 @@ services:
       DB_HOST: springfood-mysql
       SPRING_SESSION_STORE_TYPE: redis
       SPRING_REDIS_HOST: springfood-redis
+      SPRING_PROFILES_ACTIVE: development
     networks:
       - springfood-network
     depends_on:

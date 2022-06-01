@@ -19,8 +19,6 @@ services:
     command: ["/wait-for-it.sh", "springfood-mysql:3306", "-t", "30", "--", "java", "-jar", "api.jar"]
     environment:
       DB_HOST: springfood-mysql
-    ports:
-      - "8080:8080"
     networks:
       - springfood-network
     depends_on:

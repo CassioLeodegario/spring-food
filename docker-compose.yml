@@ -23,3 +23,11 @@ services:
       - springfood-network
     depends_on:
       - springfood-mysql
+
+  springfood-proxy:
+    build: ./nginx
+    image: springfood-proxy
+    ports:
+      - "80:80"
+    networks:
+      - springfood-network
